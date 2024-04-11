@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "570712488667",
+    "project_id": "flux-ba73b",
+    "storage_bucket": "flux-ba73b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570712488667:android:aee464a4a13566ae982afe",
+        "android_client_info": {
+          "package_name": "com.example.flux"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqJIM2065WQxWsNbDnSdBCItTZ2uMgP18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
