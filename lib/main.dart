@@ -5,6 +5,7 @@ import 'package:flux/screen/browse_screen.dart';
 import 'package:flux/screen/home_screen.dart';
 import 'package:flux/screen/input_data_screen.dart';
 import 'package:flux/screen/login_screen.dart';
+import 'package:flux/screen/main_screen.dart';
 import 'package:flux/screen/notification_screen.dart';
 import 'package:flux/screen/posting_screen.dart';
 import 'package:flux/screen/profile_screen.dart';
@@ -27,7 +28,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: RegisterScreen(),
+      home: MainScreen(),
       initialRoute: '/',
       routes: {
         '/browse_screen': (context) => const BrowseScreen(),
