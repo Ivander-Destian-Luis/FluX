@@ -31,7 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void initialize() async {
     prefs = await SharedPreferences.getInstance().then((value) async {
-      colorPallete = value.getBool('isDarkMode') ?? true
+      colorPallete = value.getBool('isDarkMode') ?? false
           ? DarkModeColorPallete()
           : LightModeColorPallete();
 
@@ -103,11 +103,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
             backgroundColor: colorPallete.backgroundColor,
-            body: Column(
+            body: ListView(
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                    top: 170,
+                    top: 140,
                     left: 20,
                   ),
                   child: Text(
@@ -188,7 +188,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 10, right: 250),
+                  padding: const EdgeInsets.only(top: 10, left: 20),
                   child: InkWell(
                     child: const Text(
                       'Already Have Account ?',
@@ -198,7 +198,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 20),
+                  padding: const EdgeInsets.only(top: 20, left: 30, right: 30),
                   child: ElevatedButton(
                       onPressed: () {
                         _register();

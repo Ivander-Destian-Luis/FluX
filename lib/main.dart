@@ -4,6 +4,7 @@ import 'package:flux/firebase_options.dart';
 import 'package:flux/screen/browse_screen.dart';
 import 'package:flux/screen/home_screen.dart';
 import 'package:flux/screen/input_data_screen.dart';
+import 'package:flux/screen/launch_app_screen.dart';
 import 'package:flux/screen/login_screen.dart';
 import 'package:flux/screen/notification_screen.dart';
 import 'package:flux/screen/posting_screen.dart';
@@ -27,18 +28,18 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: RegisterScreen(),
       initialRoute: '/',
       routes: {
-        '/browse_screen': (context) => const BrowseScreen(),
-        '/home_screen': (context) => const HomeScreen(),
-        '/login_screen': (context) => const LoginScreen(),
-        '/notification_screen': (context) => const NotificationScreen(),
-        '/posting_screen': (context) => const PostingScreen(),
-        '/profile_screen': (context) => const ProfileScreen(),
-        '/register_screen': (context) => const RegisterScreen(),
-        '/saved_screen': (context) => const SavedScreen(),
-        '/input_data_screen': (context) => const InputDataScreen()
+        '/browse': (context) => const BrowseScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/notification': (context) => const NotificationScreen(),
+        '/posting': (context) => const PostingScreen(),
+        '/profile': (context) => const ProfileScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/saved': (context) => const SavedScreen(),
+        '/input': (context) => const InputDataScreen(),
+        '/': (context) => const LaunchAppScreen(),
       },
     );
   }
