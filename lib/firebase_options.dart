@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '570712488667',
     projectId: 'flux-ba73b',
     authDomain: 'flux-ba73b.firebaseapp.com',
+    databaseURL: 'https://flux-ba73b-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'flux-ba73b.appspot.com',
     measurementId: 'G-F5Y11Q9TV2',
   );
@@ -55,6 +56,7 @@ class DefaultFirebaseOptions {
     appId: '1:570712488667:android:aee464a4a13566ae982afe',
     messagingSenderId: '570712488667',
     projectId: 'flux-ba73b',
+    databaseURL: 'https://flux-ba73b-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'flux-ba73b.appspot.com',
   );
 
@@ -63,6 +65,7 @@ class DefaultFirebaseOptions {
     appId: '1:570712488667:ios:c2e4f227265532a2982afe',
     messagingSenderId: '570712488667',
     projectId: 'flux-ba73b',
+    databaseURL: 'https://flux-ba73b-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'flux-ba73b.appspot.com',
     iosBundleId: 'com.example.flux',
   );
@@ -72,6 +75,7 @@ class DefaultFirebaseOptions {
     appId: '1:570712488667:ios:c2e4f227265532a2982afe',
     messagingSenderId: '570712488667',
     projectId: 'flux-ba73b',
+    databaseURL: 'https://flux-ba73b-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'flux-ba73b.appspot.com',
     iosBundleId: 'com.example.flux',
   );
@@ -82,7 +86,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '570712488667',
     projectId: 'flux-ba73b',
     authDomain: 'flux-ba73b.firebaseapp.com',
+    databaseURL: 'https://flux-ba73b-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'flux-ba73b.appspot.com',
     measurementId: 'G-HQZVTXTW6K',
   );
+
 }
