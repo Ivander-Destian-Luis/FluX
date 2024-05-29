@@ -109,6 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: TextField(
+                      style: TextStyle(color: colorPallete.fontColor),
                       controller: _emailController,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
@@ -126,6 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: TextField(
+                      style: TextStyle(color: colorPallete.fontColor),
                       controller: _passwordController,
                       obscureText: _obscurePassword,
                       textAlign: TextAlign.center,
