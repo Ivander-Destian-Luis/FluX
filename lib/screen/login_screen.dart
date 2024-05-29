@@ -58,15 +58,15 @@ class _LoginScreenState extends State<LoginScreen> {
         _saveLoginStatus();
 
         Navigator.of(context).popUntil((route) => route.isFirst);
-        Navigator.pushReplacementNamed(context, '/register_screen');
+        Navigator.pushReplacementNamed(context, '/home_screen');
       } else {
         setState(() {
-          _errorText = 'Password and email cannot be empty';
+          _errorText = 'Email and password cannot be empty';
         });
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
-        _errorText = e.message ?? 'An error occurred';
+        _errorText = 'Email or password is incorrect';
       });
     }
   }
@@ -93,12 +93,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Center(
-                      child: const Text(
+                      child: Text(
                         'Login',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 40,
-                            color: Colors.grey,
+                            color: colorPallete.fontColor,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                           hintText: "Your Email",
-                          hintStyle: TextStyle(color: Colors.grey),
+                          hintStyle: TextStyle(color: colorPallete.fontColor),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20)),
                           fillColor: colorPallete.backgroundColor),
@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         hintText: "Your Password",
                         errorText: _errorText.isNotEmpty ? _errorText : null,
-                        hintStyle: const TextStyle(color: Colors.grey),
+                        hintStyle: TextStyle(color: colorPallete.fontColor),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20)),
                         fillColor: colorPallete.backgroundColor,
@@ -162,11 +162,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.pushReplacementNamed(
-                                context, '/register_screen');
+                                context, '/forgotPassword_screen');
                           },
-                          child: const Text(
+                          child: Text(
                             'Forgot Password',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+                            style: TextStyle(fontWeight: FontWeight.bold, color: colorPallete.fontColor),
                           ),
                         ),
                       ),
@@ -177,9 +177,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             Navigator.pushReplacementNamed(
                                 context, '/register_screen');
                           },
-                          child: const Text(
+                          child: Text(
                             'Don\'t Have Account?',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+                            style: TextStyle(fontWeight: FontWeight.bold, color: colorPallete.fontColor),
                           ),
                         ),
                       ),
@@ -194,11 +194,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ElevatedButton(
                         onPressed: _signIn,
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            fixedSize: const Size(350, 50)),
-                        child: const Text(
+                            backgroundColor: colorPallete.backgroundColor,
+                            fixedSize: const Size(350, 50),
+                            side: BorderSide(color: colorPallete.fontColor, width: 2)),
+                        child: Text(
                           'Login',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                          style: TextStyle(color: colorPallete.fontColor, fontSize: 20),
                         ),
                       ),
                     ],
