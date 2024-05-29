@@ -27,7 +27,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: RegisterScreen(),
+      home: LoginScreen(),
       initialRoute: '/',
       routes: {
         '/browse_screen': (context) => const BrowseScreen(),
