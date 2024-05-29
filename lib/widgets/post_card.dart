@@ -150,25 +150,18 @@ class _PostBoxState extends State <PostCard> {
                             GestureDetector(
                               onTap: () {
                                 try {
-                                  if (_isLiked! &&
-                                      widget.post.posterUid !=
-                                          FirebaseAuth
-                                              .instance.currentUser!.uid) {
+                                  if (_isLiked!) {
                                     PostService.dislike(
                                             FirebaseAuth
                                                 .instance.currentUser!.uid,
                                             widget.post)
                                         .whenComplete(() => initialize());
                                   } else {
-                                    if (widget.post.posterUid !=
-                                        FirebaseAuth
-                                            .instance.currentUser!.uid) {
-                                      PostService.like(
-                                              FirebaseAuth
-                                                  .instance.currentUser!.uid,
-                                              widget.post)
-                                          .whenComplete(() => initialize());
-                                    }
+                                    PostService.like(
+                                            FirebaseAuth
+                                                .instance.currentUser!.uid,
+                                            widget.post)
+                                        .whenComplete(() => initialize());
                                   }
                                 } catch (e) {
                                   print("error");
