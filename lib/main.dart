@@ -28,12 +28,12 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ChangePasswordScreen(),
+      home: LoginScreen(),
       initialRoute: '/',
       routes: {
         '/browse_screen': (context) => const BrowseScreen(),
         '/home_screen': (context) => const HomeScreen(),
-        'changePassword_screen': (context) => const ChangePasswordScreen(),
+        '/changePassword_screen': (context) => const ChangePasswordScreen(),
         '/login_screen': (context) => const LoginScreen(),
         '/notification_screen': (context) => const NotificationScreen(),
         '/posting_screen': (context) => const PostingScreen(),

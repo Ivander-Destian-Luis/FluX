@@ -20,7 +20,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  String _errorText = '';
+  String _errorTextPrevious = '';
+  String _errorTextNew = '';
+  String _errorTextConfirm = '';
   late Account account;
   late ColorPallete colorPallete;
   late SharedPreferences prefs;
@@ -50,21 +52,111 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     final previousPassword = _previousPasswordController.text.trim();
     final newPassword = _newPasswordController.text.trim();
     final confirmPassword = _confirmPasswordController.text.trim();
+    bool hasError = false;
 
-    if (newPassword.length < 8 ||
-        !newPassword.contains(RegExp(r'[A-Z]')) ||
-        !newPassword.contains(RegExp(r'[a-z]')) ||
-        !newPassword.contains(RegExp(r'[0-9]'))) {
+    if (previousPassword.isEmpty) {
       setState(() {
-        _errorText = 'Minimal 8 Karakter, kombinasi [A-Z], [a-z], [0-9]';
+        _errorTextPrevious = 'Previous Password cannot be empty';
       });
-      return;
+      hasError = true;
+    } else {
+      setState(() {
+        _errorTextPrevious = '';
+      });
     }
 
-    if (newPassword != confirmPassword) {
+    if (newPassword.isEmpty) {
       setState(() {
-        _errorText = 'Password baru dan konfirmasi password tidak cocok';
+        _errorTextNew = 'New Password cannot be empty';
       });
+      hasError = true;
+    } else {
+      setState(() {
+        _errorTextNew = '';
+      });
+    }
+
+    if (confirmPassword.isEmpty) {
+      setState(() {
+        _errorTextConfirm = 'Confirm Password cannot be empty';
+      });
+      hasError = true;
+    } else {
+      setState(() {
+        _errorTextConfirm = '';
+      });
+    }
+
+    if (newPassword.isNotEmpty) {
+      if (newPassword.length < 8 ||
+          !newPassword.contains(RegExp(r'[A-Z]')) ||
+          !newPassword.contains(RegExp(r'[a-z]')) ||
+          !newPassword.contains(RegExp(r'[0-9]'))) {
+        setState(() {
+          _errorTextNew =
+              'Minimum 8 Characters, combination [A-Z], [a-z], [0-9]';
+        });
+        hasError = true;
+      } else {
+        setState(() {
+          _errorTextNew = '';
+        });
+      }
+
+      if (newPassword == previousPassword) {
+        setState(() {
+          _errorTextNew = 'New Password cannot be the same as Previous Password';
+        });
+        hasError = true;
+      }
+
+      if (confirmPassword.isNotEmpty) {
+        if (confirmPassword.length < 8 ||
+            !confirmPassword.contains(RegExp(r'[A-Z]')) ||
+            !confirmPassword.contains(RegExp(r'[a-z]')) ||
+            !confirmPassword.contains(RegExp(r'[0-9]'))) {
+          setState(() {
+            _errorTextConfirm =
+                'Minimum 8 Characters, combination [A-Z], [a-z], [0-9]';
+          });
+          hasError = true;
+        } else {
+          setState(() {
+            _errorTextConfirm = '';
+          });
+        }
+      }
+
+      if (confirmPassword.isNotEmpty && newPassword != confirmPassword) {
+        setState(() {
+          _errorTextConfirm = 'New password and confirm password do not match';
+        });
+        hasError = true;
+      } else {
+        setState(() {
+          _errorTextConfirm = '';
+        });
+      }
+    }
+
+    if (previousPassword.isNotEmpty) {
+      if (previousPassword.length < 8 ||
+          !previousPassword.contains(RegExp(r'[A-Z]')) ||
+          !previousPassword.contains(RegExp(r'[a-z]')) ||
+          !previousPassword.contains(RegExp(r'[0-9]'))) {
+        setState(() {
+          _errorTextPrevious =
+              'Minimum 8 Characters, combination [A-Z], [a-z], [0-9]';
+        });
+        hasError = true;
+      } else {
+        setState(() {
+          _errorTextPrevious = '';
+        });
+      }
+    }
+
+    if (hasError) {
       return;
     }
 
@@ -84,7 +176,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       }
     } catch (e) {
       setState(() {
-        _errorText = 'Failed to update password: $e';
+        _errorTextConfirm = 'The previous password you entered was incorrect';
       });
     }
   }
@@ -98,14 +190,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             body: ListView(
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
-                    );
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.chevron_left,
+                        color: colorPallete.fontColor,
+                        size: 40,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()),
+                        );
+                      },
+                    ),
+                  ],
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,7 +217,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                              top: 150, left: 30.0, right: 30.0, bottom: 10),
+                              top: 150, left: 30.0, right: 30.0),
                           child: Text('Previous Password',
                               style: TextStyle(
                                   fontSize: 16, color: colorPallete.fontColor)),
@@ -127,8 +229,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             obscureText: _obscurePassword,
                             style: TextStyle(color: colorPallete.fontColor),
                             decoration: InputDecoration(
-                              errorText:
-                                  _errorText.isNotEmpty ? _errorText : null,
+                              errorText: _errorTextPrevious.isNotEmpty
+                                  ? _errorTextPrevious
+                                  : null,
                               border: const UnderlineInputBorder(
                                   borderSide: BorderSide()),
                             ),
@@ -141,7 +244,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                              top: 30.0, left: 30.0, right: 30.0, bottom: 10),
+                              top: 30.0, left: 30.0, right: 30.0),
                           child: Text('New Password',
                               style: TextStyle(
                                   fontSize: 16, color: colorPallete.fontColor)),
@@ -153,8 +256,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             obscureText: _obscurePassword,
                             style: TextStyle(color: colorPallete.fontColor),
                             decoration: InputDecoration(
-                              errorText:
-                                  _errorText.isNotEmpty ? _errorText : null,
+                              errorText: _errorTextNew.isNotEmpty
+                                  ? _errorTextNew
+                                  : null,
                               border: const UnderlineInputBorder(
                                   borderSide: BorderSide()),
                             ),
@@ -167,20 +271,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                              left: 30.0, right: 30.0, top: 20, bottom: 10),
+                              left: 30.0, right: 30.0, top: 20.0),
                           child: Text('Confirm Password',
                               style: TextStyle(
                                   fontSize: 16, color: colorPallete.fontColor)),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
-                              left: 30, right: 30, bottom: 20),
+                              left: 30, right: 30, bottom: 30),
                           child: TextFormField(
                             controller: _confirmPasswordController,
                             style: TextStyle(color: colorPallete.fontColor),
                             decoration: InputDecoration(
-                              errorText:
-                                  _errorText.isNotEmpty ? _errorText : null,
+                              errorText: _errorTextConfirm.isNotEmpty
+                                  ? _errorTextConfirm
+                                  : null,
                               border: const UnderlineInputBorder(
                                   borderSide: BorderSide()),
                             ),
@@ -197,10 +302,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               passwordValidation();
                             },
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: colorPallete.backgroundColor),
+                                backgroundColor: colorPallete.backgroundColor,
+                                fixedSize: const Size(350, 50),
+                                side: BorderSide(
+                                    color: colorPallete.fontColor, width: 2)),
                             child: Text(
                               'Change It',
-                              style: TextStyle(color: colorPallete.fontColor),
+                              style: TextStyle(
+                                  color: colorPallete.fontColor, fontSize: 20),
                             )),
                       ],
                     ),
