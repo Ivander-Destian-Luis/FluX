@@ -12,7 +12,6 @@ import 'package:flux/services/account_service.dart';
 import 'package:flux/services/post_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:easy_image_viewer/easy_image_viewer.dart';
 
 class PostingScreen extends StatefulWidget {
   const PostingScreen({super.key});
