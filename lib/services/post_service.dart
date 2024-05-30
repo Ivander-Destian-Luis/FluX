@@ -20,8 +20,10 @@ class PostService {
           listData.forEach((key, value) {
             final data = value as Map<Object?, Object?>;
             Map<String, dynamic> accountData = {};
+            bool likesExisted = false;
             data.forEach((key, value) {
               if (key.toString() == 'likes') {
+                likesExisted = true;
                 final dataLikes = value as List<Object?>;
                 List<String> likes = [];
                 for (var like in dataLikes) {
@@ -44,6 +46,11 @@ class PostService {
                 accountData[key.toString()] = value;
               }
             });
+
+            if (!likesExisted) {
+              accountData['likes'] = List<String>.empty();
+            }
+
             accountData['post_id'] = key.toString();
             items.add(Posting.fromJson(accountData));
           });
@@ -91,10 +98,12 @@ class PostService {
     try {
       DataSnapshot snapshot = await _database.child(posting.postId!).get();
       Map<Object?, Object?> data = snapshot.value as Map<Object?, Object?>;
-      List<Object?> dataLikes = data['likes'] as List<Object?>;
+      List<Object?> dataLikes = (data['likes'] ?? []) as List<Object?>;
       List<String> likes = [];
-      for (var like in dataLikes) {
-        likes.add(like.toString());
+      if (dataLikes.isNotEmpty) {
+        for (var like in dataLikes) {
+          likes.add(like.toString());
+        }
       }
       likes.add(uid);
       await _database.child(posting.postId!).update({'likes': likes});
