@@ -2,8 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/firebase_options.dart';
 import 'package:flux/screen/browse_screen.dart';
+import 'package:flux/screen/change_password_screen.dart';
+import 'package:flux/screen/forgotPassword_screen.dart';
 import 'package:flux/screen/home_screen.dart';
 import 'package:flux/screen/input_data_screen.dart';
+import 'package:flux/screen/launch_app_screen.dart';
 import 'package:flux/screen/login_screen.dart';
 import 'package:flux/screen/main_screen.dart';
 import 'package:flux/screen/notification_screen.dart';
@@ -28,11 +31,13 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MainScreen(),
+      home: LoginScreen(),
       initialRoute: '/',
       routes: {
         '/browse_screen': (context) => const BrowseScreen(),
+        '/forgotPassword_screen': (context) => const ForgotPassword(),
         '/home_screen': (context) => const HomeScreen(),
+        'changePassword_screen': (context) => const ChangePasswordScreen(),
         '/login_screen': (context) => const LoginScreen(),
         '/notification_screen': (context) => const NotificationScreen(),
         '/posting_screen': (context) => const PostingScreen(),

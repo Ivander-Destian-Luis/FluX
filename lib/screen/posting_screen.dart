@@ -10,6 +10,8 @@ class PostingScreen extends StatefulWidget {
 class _PostingScreenState extends State<PostingScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return ListView(
+      children: [],
+    );
   }
 }
