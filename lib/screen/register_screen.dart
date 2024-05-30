@@ -122,6 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: TextStyle(color: colorPallete.fontColor),
                     controller: _emailController,
                     decoration: InputDecoration(
+                        filled: true,
                         errorText: _errorTextForEmail.isNotEmpty
                             ? _errorTextForEmail
                             : null,
@@ -144,6 +145,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           : null,
                       hintText: 'Masukkan Password...',
                       hintStyle: TextStyle(color: colorPallete.fontColor),
+                      filled: true,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20)),
                       fillColor: colorPallete.backgroundColor,
@@ -166,6 +168,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     obscureText: _obscureConfirmPassword,
                     controller: _confirmPasswordController,
                     decoration: InputDecoration(
+                      filled: true,
                       errorText: _errorTextForConfirmPassword.isNotEmpty
                           ? _errorTextForConfirmPassword
                           : null,
