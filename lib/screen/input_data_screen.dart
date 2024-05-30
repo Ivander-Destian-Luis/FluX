@@ -95,7 +95,7 @@ class _InputDataScreenState extends State<InputDataScreen> {
               children: [
                 Padding(
                     padding: EdgeInsets.only(top: 70, bottom: 40),
-                    child: InkWell(
+                    child: GestureDetector(
                       onTap: () {
                         _pickImage();
                       },

@@ -87,7 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (email.isNotEmpty && password.isNotEmpty) {
       await AuthenticationService.register(email, password);
-      Navigator.pushReplacementNamed(context, '/input_data_screen');
+      Navigator.pushReplacementNamed(context, '/input_data');
     }
   }
 

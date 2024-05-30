@@ -38,8 +38,8 @@ class MainApp extends StatelessWidget {
         '/profile': (context) => const ProfileScreen(),
         '/register': (context) => const RegisterScreen(),
         '/saved': (context) => const SavedScreen(),
-        '/input': (context) => const InputDataScreen(),
-        '/': (context) => const LaunchAppScreen(),
+        '/': (context) => const InputDataScreen(),
+        '/ss': (context) => const LaunchAppScreen(),
       },
     );
   }
