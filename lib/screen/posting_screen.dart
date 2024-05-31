@@ -1,14 +1,10 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/models/posting.dart';
-import 'package:flux/services/account_service.dart';
 import 'package:flux/services/location_service.dart';
 import 'package:flux/services/post_service.dart';
 import 'package:geocoding/geocoding.dart';
@@ -31,6 +27,7 @@ class _PostingScreenState extends State<PostingScreen> {
   late Account account;
   late SharedPreferences prefs;
   File? _imageFile;
+  Position? position;
 
   bool _isLoading = true;
   String _location = "";
@@ -45,10 +42,10 @@ class _PostingScreenState extends State<PostingScreen> {
   }
 
   void _pickLocation() async {
-    Position? position = await LocationService.getCurrentPosition();
-    List<Placemark> placemarks = await GeocodingPlatform.instance!.placemarkFromCoordinates(position!.latitude, position.longitude);
+    position = await LocationService.getCurrentPosition();
+    List<Placemark> placemarks = await GeocodingPlatform.instance!.placemarkFromCoordinates(position!.latitude, position!.longitude);
     setState(() {
-      _location = "${placemarks[0].administrativeArea}, ${placemarks[0].subAdministrativeArea}";
+      _location = "${placemarks[0].subAdministrativeArea}";
     });
   }
 
@@ -75,13 +72,21 @@ class _PostingScreenState extends State<PostingScreen> {
         postingDescription: description,
         location: _location,
         likes: [],
+        latitude: position!.latitude,
+        longitude: position!.longitude,
         comments: {},
         postedTime: DateTime.now(),
         postId: null,
         posterUid: FirebaseAuth.instance.currentUser!.uid);
 
-    PostService.post(post, FirebaseAuth.instance.currentUser!.uid);
-    Navigator.of(context).pop();
+    int statusCode = await PostService.post(post, FirebaseAuth.instance.currentUser!.uid);
+
+    if (statusCode == 200) {
+      Navigator.pushReplacementNamed(context, '/main');
+    }
+    else {
+      print("LOL");
+    }
   }
 
   @override
@@ -127,7 +132,7 @@ class _PostingScreenState extends State<PostingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 20),
+                    padding: const EdgeInsets.only(left: 20),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -144,7 +149,7 @@ class _PostingScreenState extends State<PostingScreen> {
                     child: Container(
                       width: 350,
                       height: 350,
-                      margin: EdgeInsets.only(top: 10, bottom: 10),
+                      margin: const EdgeInsets.only(top: 10, bottom: 10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.black26),
@@ -171,20 +176,20 @@ class _PostingScreenState extends State<PostingScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(left: 20),
+                        padding: const EdgeInsets.only(left: 20),
                         child: Text(
                           _location.isEmpty ? "Pilih Lokasi" : _location,
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ),
                       IconButton(
                           onPressed: () async {
                             _pickLocation();
-                          }, icon: Icon(Icons.location_on)),
+                          }, icon: const Icon(Icons.location_on)),
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 20, right: 20),
+                    padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Divider(
                       color: colorPallete.borderColor,
                     ),
@@ -209,13 +214,13 @@ class _PostingScreenState extends State<PostingScreen> {
                       border: Border.all(color: colorPallete.borderColor),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextField(
                       maxLines: null,
                       controller: _descriptionController,
                       cursorColor: colorPallete.textFieldTextColor,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: InputBorder.none,
                           ),
                     ),

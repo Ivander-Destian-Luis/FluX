@@ -92,17 +92,27 @@ class _PostBoxState extends State <PostCard> {
                                       NetworkImage(account!.profilePictureUrl),
                                 )
                               : const CircleAvatar(),
-                          Text(
-                            account!.username,
-                            style:
-                                TextStyle(color: widget.colorPallete.fontColor),
-                          ),
-                          Text(
-                            '1h',
-                            style: TextStyle(
-                              color: widget.colorPallete.fontColor
-                                  .withOpacity(0.4),
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    account!.username,
+                                    style:
+                                        TextStyle(color: widget.colorPallete.fontColor),
+                                  ),
+                                  Text(
+                                    '${DateTime.now().difference(widget.post.postedTime).inHours > 0 ? '${DateTime.now().difference(widget.post.postedTime).inHours}h' : ''} ${DateTime.now().difference(widget.post.postedTime).inMinutes > 0 ? DateTime.now().difference(widget.post.postedTime).inMinutes : 0}m',
+                                    style: TextStyle(
+                                      color: widget.colorPallete.fontColor
+                                          .withOpacity(0.4),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(widget.post.location, style: TextStyle(fontSize: 10, color: widget.colorPallete.textLinkColor),),
+                            ],
                           ),
                         ],
                       ),

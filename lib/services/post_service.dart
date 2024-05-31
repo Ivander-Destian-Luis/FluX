@@ -21,6 +21,7 @@ class PostService {
             final data = value as Map<Object?, Object?>;
             Map<String, dynamic> accountData = {};
             bool likesExisted = false;
+            bool commentsExisted= false;
             data.forEach((key, value) {
               if (key.toString() == 'likes') {
                 likesExisted = true;
@@ -31,6 +32,7 @@ class PostService {
                 }
                 accountData[key.toString()] = likes;
               } else if (key.toString() == 'comments') {
+                commentsExisted = true;
                 final dataComments = value as Map<Object?, Object?>;
                 Map<String, List<String>> comments = {};
                 dataComments.forEach((key, value) {
@@ -51,27 +53,44 @@ class PostService {
               accountData['likes'] = List<String>.empty();
             }
 
+            if (!commentsExisted) {
+              accountData['comments'] = Map<String, List<dynamic>>.from({});
+            }
+
             accountData['post_id'] = key.toString();
             items.add(Posting.fromJson(accountData));
           });
         }
       } catch (e) {
         print(e);
+        print("error");
       }
       return items;
     });
   }
 
-  static Future<void> post(Posting posting, String uid) async {
-    await _database.push().set({
-      'uid': uid,
-      'location': posting.location,
-      'posting_image_url': posting.postingImageUrl,
-      'description': posting.postingDescription,
-      'likes': posting.likes,
-      'comments': posting.comments,
-      'postedTime': DateTime.now().toString(),
-    });
+  static Future<int> post(Posting posting, String uid) async {
+    int statusCode = 0;
+    try {
+      await _database.push().set({
+        'uid': uid,
+        'location': posting.location,
+        'posting_image_url': posting.postingImageUrl,
+        'description': posting.postingDescription,
+        'likes': posting.likes,
+        'latitude': posting.latitude,
+        'longitude': posting.longitude,
+        'comments': posting.comments,
+        'postedTime': DateTime.now().toString(),
+      });
+
+      statusCode = 200;
+    } catch (e) {
+      statusCode = 401;
+      print(e);
+    }
+
+    return statusCode;
   }
 
   static Future<String?> addPostingImage(File? selectedImage) async {
@@ -134,8 +153,10 @@ class PostService {
       DataSnapshot snapshot = await _database.child(posting.postId!).get();
       Map<Object?, Object?> data = snapshot.value as Map<Object?, Object?>;
       Map<String, dynamic> mapComments = {};
+      bool commentsExist = false;
       data.forEach((key, value) {
         if (key.toString() == 'comments') {
+          commentsExist = true;
           final temp = value as Map<Object?, Object?>;
           bool isExist = false;
           bool isEmpty = false;
@@ -167,6 +188,10 @@ class PostService {
           }
         }
       });
+
+      if (!commentsExist) {
+        mapComments[uid] = [comment];
+      }
       await _database.child(posting.postId!).update({'comments': mapComments});
     } catch (e) {
       print("error sending comment");
