@@ -201,7 +201,6 @@ class _PostingScreenState extends State<PostingScreen> {
                                   BorderSide(color: colorPallete.borderColor)),
                           filled: true,
                           contentPadding: EdgeInsets.all(10),
-                          hint
                           fillColor: colorPallete.textFieldBackgroundColor),
                     ),
                   ),
