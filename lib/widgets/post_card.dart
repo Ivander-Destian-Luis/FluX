@@ -103,7 +103,7 @@ class _PostBoxState extends State <PostCard> {
                                         TextStyle(color: widget.colorPallete.fontColor),
                                   ),
                                   Text(
-                                    '${DateTime.now().difference(widget.post.postedTime).inHours > 0 ? '${DateTime.now().difference(widget.post.postedTime).inHours}h' : ''} ${DateTime.now().difference(widget.post.postedTime).inMinutes > 0 ? DateTime.now().difference(widget.post.postedTime).inMinutes : 0}m',
+                                    '${DateTime.now().difference(widget.post.postedTime).inDays > 0 ? '${DateTime.now().difference(widget.post.postedTime).inDays}d ' : ''}${DateTime.now().difference(widget.post.postedTime).inHours > 0 ? '${DateTime.now().difference(widget.post.postedTime).inHours % 24}h ' : ''}${DateTime.now().difference(widget.post.postedTime).inMinutes > 0 ? "${DateTime.now().difference(widget.post.postedTime).inMinutes % 60}m" : "${DateTime.now().difference(widget.post.postedTime).inSeconds % 60}s"}',
                                     style: TextStyle(
                                       color: widget.colorPallete.fontColor
                                           .withOpacity(0.4),
@@ -192,12 +192,12 @@ class _PostBoxState extends State <PostCard> {
                           children: [
                             GestureDetector(
                               onTap: () {
+                                TextEditingController commentController =
+                                    TextEditingController();
                                 showModalBottomSheet(
                                     context: context,
                                     isScrollControlled: true,
                                     builder: (context) {
-                                      TextEditingController commentController =
-                                          TextEditingController();
                                       List<Widget> children = [];
                                       children.add(
                                         Container(
@@ -304,6 +304,22 @@ class _PostBoxState extends State <PostCard> {
                                                           .fontColor),
                                                 ),
                                               ),
+                                              onSubmitted: (value) {
+                                                if (value.isNotEmpty) {
+                                                      PostService.comment(
+                                                              FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser!
+                                                                  .uid, 
+                                                              value,
+                                                              widget.post)
+                                                          .whenComplete(() {
+                                                        initialize();
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      });
+                                                }
+                                              },
                                               style: TextStyle(
                                                 color: widget
                                                     .colorPallete.fontColor,

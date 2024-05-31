@@ -81,7 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ));
                             postingBoxes.add(const SizedBox(height: 10));
                           }
-                          print(postingBoxes);
                         }
                         return ListView(
                           children: postingBoxes,
