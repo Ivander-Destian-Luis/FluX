@@ -14,6 +14,7 @@ import 'package:flux/screen/posting_screen.dart';
 import 'package:flux/screen/profile_screen.dart';
 import 'package:flux/screen/register_screen.dart';
 import 'package:flux/screen/saved_screen.dart';
+import 'package:flux/screen/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -40,12 +41,12 @@ class MainApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/notification': (context) => const NotificationScreen(),
         '/posting': (context) => const PostingScreen(),
-        '/profile': (context) => const ProfileScreen(),
         '/register': (context) => const RegisterScreen(),
         '/saved': (context) => const SavedScreen(),
         '/input_data': (context) => const InputDataScreen(),
         '/main': (context) => const MainScreen(),
         '/launch': (context) => const LaunchAppScreen(),
+        '/settings': (context) => const SettingsScreen()
       },
     );
   }
