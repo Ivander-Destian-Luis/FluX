@@ -44,8 +44,7 @@ class _PostingScreenState extends State<PostingScreen> {
       colorPallete = value.getBool('isDarkMode') ?? false
           ? DarkModeColorPallete()
           : LightModeColorPallete();
-      account = (await AccountService.getAccountByUid(
-          FirebaseAuth.instance.currentUser!.uid))!;
+
       setState(() {
         _isLoading = false;
       });
@@ -192,6 +191,7 @@ class _PostingScreenState extends State<PostingScreen> {
                   Padding(
                     padding: EdgeInsets.only(left: 20, right: 20, top: 10),
                     child: TextField(
+                      maxLines: null,
                       controller: _descriptionController,
                       cursorColor: colorPallete.textFieldTextColor,
                       decoration: InputDecoration(
@@ -200,7 +200,8 @@ class _PostingScreenState extends State<PostingScreen> {
                               borderSide:
                                   BorderSide(color: colorPallete.borderColor)),
                           filled: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 50),
+                          contentPadding: EdgeInsets.all(10),
+                          hint
                           fillColor: colorPallete.textFieldBackgroundColor),
                     ),
                   ),
