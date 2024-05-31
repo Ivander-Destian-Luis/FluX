@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/models/posting.dart';
+import 'package:flux/services/account_service.dart';
 import 'package:flux/services/post_service.dart';
 import 'package:flux/widgets/post_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
       colorPallete = value.getBool('isDarkMode') ?? false
           ? DarkModeColorPallete()
           : LightModeColorPallete();
+
+      account = (await AccountService.getAccountByUid(FirebaseAuth.instance.currentUser!.uid))!;
 
       setState(() {
         _isLoading = false;
@@ -69,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             List<Posting>.empty()) as List<Posting>;
                         List<Widget> postingBoxes = [];
                         for (Posting post in posts) {
-                          if (account.followings.contains(post.posterUid)) {
+                          if (account.followings.contains(post.posterUid) || post.posterUid == FirebaseAuth.instance.currentUser!.uid) {
                             postingBoxes.add(PostCard(
                               colorPallete: colorPallete,
                               uid: post.posterUid!,
