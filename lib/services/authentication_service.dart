@@ -1,22 +1,38 @@
 import "package:firebase_auth/firebase_auth.dart";
 
 class AuthenticationService {
-  static Future<void> login(String email, String password) async {
+  static Future<int> login(String email, String password) async {
+    int statusCode = 0;
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+
+      statusCode = 200;
     } catch (e) {
       print(e);
+      statusCode = 404;
     }
+
+    return statusCode;
   }
 
-  static Future<void> register(String email, String password) async {
+  static Future<int> register(String email, String password) async {
+    int statusCode = 0;
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
+
+      statusCode = 200;
     } catch (e) {
       print(e);
+      if (e.toString().contains('already in use')) {
+        statusCode = 401;
+      } else {
+        statusCode = 404;
+      }
     }
+
+    return statusCode;
   }
 
   static Future<void> logout() async {
