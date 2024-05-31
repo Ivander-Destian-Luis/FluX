@@ -33,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
 
   void initialize() async {
     prefs = await SharedPreferences.getInstance().then((value) async {
-      colorPallete = value.getBool('isDarkMode') ?? true
+      colorPallete = value.getBool('isDarkMode') ?? false
           ? DarkModeColorPallete()
           : LightModeColorPallete();
 
@@ -58,7 +58,7 @@ class _MainScreenState extends State<MainScreen> {
           backgroundColor: colorPallete.backgroundColor,
           body: _children[_currentIndex],
           bottomNavigationBar: CurvedNavigationBar(
-            height: 75,
+            height: 60,
             backgroundColor: colorPallete.backgroundColor,
             color: colorPallete.postBackgroundColor,
             buttonBackgroundColor: _currentIndex == 2 ? colorPallete.heroColor : colorPallete.postBackgroundColor,

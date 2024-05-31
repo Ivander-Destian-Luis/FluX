@@ -31,16 +31,21 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void initialize() async {
-    prefs = await SharedPreferences.getInstance().then((value) async {
-      colorPallete = value.getBool('isDarkMode') ?? true
-          ? DarkModeColorPallete()
-          : LightModeColorPallete();
+    if (FirebaseAuth.instance.currentUser != null) {
+      Navigator.pushReplacementNamed(context, '/main');
+    }
+    else {
+      prefs = await SharedPreferences.getInstance().then((value) async {
+        colorPallete = value.getBool('isDarkMode') ?? false
+            ? DarkModeColorPallete()
+            : LightModeColorPallete();
 
-      setState(() {
-        _isLoading = false;
+        setState(() {
+          _isLoading = false;
+        });
+        return value;
       });
-      return value;
-    });
+    }
   }
 
   Future<void> _signIn() async {
@@ -55,10 +60,10 @@ class _LoginScreenState extends State<LoginScreen> {
           password: password,
         );
 
-        _saveLoginStatus();
+        // _saveLoginStatus();
 
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        Navigator.pushReplacementNamed(context, '/home_screen');
+        // Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.pushReplacementNamed(context, '/main');
       } else {
         setState(() {
           _errorText = 'Email and password cannot be empty';
@@ -71,18 +76,18 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<void> _saveLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isLoggedIn', true);
-  }
+  // Future<void> _saveLoginStatus() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setBool('isLoggedIn', true);
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: colorPallete.backgroundColor,
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
+    return _isLoading
+      ? Center(child: CircularProgressIndicator())
+      : Scaffold(
+          backgroundColor: colorPallete.backgroundColor,
+          body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -162,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.pushReplacementNamed(
-                                context, '/forgotPassword_screen');
+                                context, '/forgotPassword');
                           },
                           child: Text(
                             'Forgot Password',
@@ -175,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.pushReplacementNamed(
-                                context, '/register_screen');
+                                context, '/register');
                           },
                           child: Text(
                             'Don\'t Have Account?',

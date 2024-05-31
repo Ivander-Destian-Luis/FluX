@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void initialize() async {
     prefs = await SharedPreferences.getInstance().then((value) async {
-      colorPallete = value.getBool('isDarkMode') ?? true
+      colorPallete = value.getBool('isDarkMode') ?? false
           ? DarkModeColorPallete()
           : LightModeColorPallete();
 
@@ -52,10 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   Image(
                   image: colorPallete.logo,
                   fit: BoxFit.contain,
-                  height: 32,
+                  height: 48,
                   ),
                 ],
               ),
+              automaticallyImplyLeading: false,
             ),
             body: Column(
                 children: [

@@ -62,11 +62,10 @@ class _InputDataScreenState extends State<InputDataScreen> {
     if (username.isNotEmpty && phoneNumber.isNotEmpty && bio.isNotEmpty) {
       if (_imageFile == null) {
         await AccountService.addUser(username, phoneNumber, bio, null);
-        Navigator.pushReplacementNamed(context, '/home_screen');
       } else {
         await AccountService.addUser(username, phoneNumber, bio, imageUrl);
-        Navigator.pushReplacementNamed(context, '/home_screen');
       }
+        Navigator.pushReplacementNamed(context, '/home');
     }
   }
 
