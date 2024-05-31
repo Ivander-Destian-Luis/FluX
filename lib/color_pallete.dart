@@ -9,6 +9,7 @@ class ColorPallete {
   late Color buttonColor;
   late Color postBackgroundColor;
   late Color borderColor;
+  late Color heroColor;
   Color textLinkColor = const Color(0xFF4F75FB);
 }
 
@@ -22,6 +23,7 @@ class DarkModeColorPallete extends ColorPallete {
     super.buttonColor = const Color(0xFF333232);
     super.postBackgroundColor = const Color(0xFF000000);
     super.borderColor = const Color(0xFFFFFFFF);
+    super.heroColor = const Color(0xFFFFC107);
   }
 }
 
@@ -35,5 +37,6 @@ class LightModeColorPallete extends ColorPallete {
     super.buttonColor = const Color(0xFFB2B2B2);
     super.postBackgroundColor = const Color(0xFFFFFFFF);
     super.borderColor = const Color(0xFF000000);
+    super.heroColor = const Color(0xFF03A9F4);
   }
 }

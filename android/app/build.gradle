@@ -69,5 +69,9 @@ flutter {
 }
 
 dependencies {
+<<<<<<< HEAD
      implementation 'androidx.multidex:multidex:2.0.1'
+=======
+    implementation 'androidx.multidex:multidex:2.0.1'
+>>>>>>> da56343ced7713898d2517308f03dda8d3469eb4
 }
