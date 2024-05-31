@@ -1,13 +1,11 @@
-import 'package:geolocator/geolocator.dart';
-
 class Posting {
   String? postingImageUrl;
   final String? posterUid;
   final String? postId;
   final String postingDescription;
-  final String location;
-  final double latitude;
-  final double longitude;
+  final String? location;
+  final double? latitude;
+  final double? longitude;
   final List<String> likes;
   final Map<String, List<dynamic>> comments;
   final DateTime postedTime;

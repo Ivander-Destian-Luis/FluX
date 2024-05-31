@@ -49,39 +49,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
               leading: IconButton(
                 icon: Icon(Icons.arrow_back_ios, color: colorPallete.fontColor),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.popAndPushNamed(context, '/main');
                 },
               ),
               backgroundColor: colorPallete.backgroundColor,
             ),
-            body: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text('Dark Mode',
-                          style: TextStyle(
-                              color: colorPallete.fontColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                    Switch(
-                      value: _isDarkMode!,
-                      onChanged: (value) {
-                        setState(() {
-                          _isDarkMode = !_isDarkMode!;
-                          colorPallete = _isDarkMode!
-                              ? DarkModeColorPallete()
-                              : LightModeColorPallete();
-                        });
-                        prefs.setBool('isDarkMode', _isDarkMode!);
-                      },
-                    ),
-                  ],
-                ),
-              ],
+            body: PopScope(
+              canPop: false,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text('Dark Mode',
+                            style: TextStyle(
+                                color: colorPallete.fontColor,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                      Switch(
+                        value: _isDarkMode!,
+                        onChanged: (value) {
+                          setState(() {
+                            _isDarkMode = !_isDarkMode!;
+                            colorPallete = _isDarkMode!
+                                ? DarkModeColorPallete()
+                                : LightModeColorPallete();
+                          });
+                          prefs.setBool('isDarkMode', _isDarkMode!);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
   }

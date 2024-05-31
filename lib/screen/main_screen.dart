@@ -74,6 +74,7 @@ class _MainScreenState extends State<MainScreen> {
                   : colorPallete.postBackgroundColor,
               animationDuration: const Duration(milliseconds: 250),
               onTap: (index) {
+                initialize();
                 setState(() {
                   _currentIndex = index;
                 });
