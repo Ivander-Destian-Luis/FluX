@@ -9,7 +9,10 @@ import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/models/posting.dart';
 import 'package:flux/services/account_service.dart';
+import 'package:flux/services/location_service.dart';
 import 'package:flux/services/post_service.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -21,14 +24,16 @@ class PostingScreen extends StatefulWidget {
 }
 
 class _PostingScreenState extends State<PostingScreen> {
-  TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final picker = ImagePicker();
+
   late ColorPallete colorPallete;
   late Account account;
   late SharedPreferences prefs;
-  bool _isLoading = true;
   File? _imageFile;
-  String assetsImage = 'assets/images/logo-terang.png';
-  final picker = ImagePicker();
+
+  bool _isLoading = true;
+  String _location = "";
 
   Future<void> _pickImage() async {
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
@@ -37,6 +42,14 @@ class _PostingScreenState extends State<PostingScreen> {
         _imageFile = File(pickedImage.path);
       });
     }
+  }
+
+  void _pickLocation() async {
+    Position? position = await LocationService.getCurrentPosition();
+    List<Placemark> placemarks = await GeocodingPlatform.instance!.placemarkFromCoordinates(position!.latitude, position.longitude);
+    setState(() {
+      _location = "${placemarks[0].administrativeArea}, ${placemarks[0].subAdministrativeArea}";
+    });
   }
 
   void initialize() async {
@@ -60,7 +73,7 @@ class _PostingScreenState extends State<PostingScreen> {
     }
     Posting post = Posting(
         postingDescription: description,
-        location: 'Palembang',
+        location: _location,
         likes: [],
         comments: {},
         postedTime: DateTime.now(),
@@ -86,45 +99,42 @@ class _PostingScreenState extends State<PostingScreen> {
             appBar: AppBar(
               backgroundColor: colorPallete.backgroundColor,
               title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 270),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Posting',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: colorPallete.fontColor,
-                        ),
-                      ),
+                  Text(
+                    'Posting',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: colorPallete.fontColor,
                     ),
                   ),
-                  Align(
-                      alignment: Alignment.topRight,
-                      child: GestureDetector(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: Text(
-                          'X',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ))
+                  GestureDetector(
+                    onTap: () {
+                      _posting();
+                    },
+                    child: Text(
+                      'Post',
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold, color: colorPallete.textLinkColor),
+                    ),
+                  )
                 ],
               ),
             ),
             body: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 20),
-                    child: Text(
-                      'Media',
-                      style: TextStyle(
-                          fontSize: 20, color: colorPallete.fontColor),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Media',
+                        style: TextStyle(
+                            fontSize: 20, color: colorPallete.fontColor),
+                      ),
                     ),
                   ),
                   GestureDetector(
@@ -134,7 +144,7 @@ class _PostingScreenState extends State<PostingScreen> {
                     child: Container(
                       width: 350,
                       height: 350,
-                      margin: EdgeInsets.only(top: 10, left: 22, bottom: 10),
+                      margin: EdgeInsets.only(top: 10, bottom: 10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.black26),
@@ -158,20 +168,19 @@ class _PostingScreenState extends State<PostingScreen> {
                     ),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
                         padding: EdgeInsets.only(left: 20),
                         child: Text(
-                          'Pilih Lokasi',
-                          style: TextStyle(fontSize: 20),
+                          _location.isEmpty ? "Pilih Lokasi" : _location,
+                          style: TextStyle(fontSize: 16),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 215),
-                        child: IconButton(
-                            onPressed: () {}, icon: Icon(Icons.location_on)),
-                      ),
+                      IconButton(
+                          onPressed: () async {
+                            _pickLocation();
+                          }, icon: Icon(Icons.location_on)),
                     ],
                   ),
                   Padding(
@@ -181,44 +190,36 @@ class _PostingScreenState extends State<PostingScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 20, top: 10),
-                    child: Text(
-                      'Details',
-                      style: TextStyle(
-                          fontSize: 20, color: colorPallete.fontColor),
+                    padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Details',
+                        style: TextStyle(
+                            fontSize: 20, color: colorPallete.fontColor),
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                  Container(
+                    constraints: const BoxConstraints(
+                      minHeight: 150,
+                    ),
+                    decoration: BoxDecoration(
+                      color: colorPallete.textFieldBackgroundColor,
+                      border: Border.all(color: colorPallete.borderColor),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
                     child: TextField(
                       maxLines: null,
                       controller: _descriptionController,
                       cursorColor: colorPallete.textFieldTextColor,
                       decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                                  BorderSide(color: colorPallete.borderColor)),
-                          filled: true,
-                          contentPadding: EdgeInsets.all(10),
-                          fillColor: colorPallete.textFieldBackgroundColor),
+                          border: InputBorder.none,
+                          ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 30, left: 120),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          _posting();
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: colorPallete.backgroundColor,
-                            fixedSize: const Size(150, 50)),
-                        child: Text(
-                          'Post',
-                          style: TextStyle(
-                              color: colorPallete.fontColor, fontSize: 20),
-                        )),
-                  )
                 ],
               ),
             ));
