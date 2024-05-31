@@ -33,8 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initialize() async {
     if (FirebaseAuth.instance.currentUser != null) {
       Navigator.pushReplacementNamed(context, '/main');
-    }
-    else {
+    } else {
       prefs = await SharedPreferences.getInstance().then((value) async {
         colorPallete = value.getBool('isDarkMode') ?? false
             ? DarkModeColorPallete()
@@ -49,45 +48,33 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _signIn() async {
-    try {
-      final String userEmail = _emailController.text;
-      final String password = _passwordController.text;
+    final String userEmail = _emailController.text;
+    final String password = _passwordController.text;
 
-      if (userEmail.isNotEmpty && password.isNotEmpty) {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: userEmail,
-          password: password,
-        );
+    if (userEmail.isNotEmpty && password.isNotEmpty) {
+      int statusCode = await AuthenticationService.login(userEmail, password);
 
-        // _saveLoginStatus();
-
-        // Navigator.of(context).popUntil((route) => route.isFirst);
+      if (statusCode == 200) {
         Navigator.pushReplacementNamed(context, '/main');
       } else {
         setState(() {
-          _errorText = 'Email and password cannot be empty';
+          _errorText = "Email or Password is incorrect";
         });
       }
-    } on FirebaseAuthException catch (e) {
+    } else {
       setState(() {
-        _errorText = 'Email or password is incorrect';
+        _errorText = 'Email and password cannot be empty';
       });
     }
   }
 
-  // Future<void> _saveLoginStatus() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setBool('isLoggedIn', true);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return _isLoading
-      ? Center(child: CircularProgressIndicator())
-      : Scaffold(
-          backgroundColor: colorPallete.backgroundColor,
-          body: SingleChildScrollView(
+        ? const Center(child: CircularProgressIndicator())
+        : Scaffold(
+            backgroundColor: colorPallete.backgroundColor,
+            body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -171,7 +158,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           child: Text(
                             'Forgot Password',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: colorPallete.fontColor),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: colorPallete.fontColor),
                           ),
                         ),
                       ),
@@ -184,7 +173,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           child: Text(
                             'Don\'t Have Account?',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: colorPallete.fontColor),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: colorPallete.fontColor),
                           ),
                         ),
                       ),
@@ -201,10 +192,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: colorPallete.backgroundColor,
                             fixedSize: const Size(350, 50),
-                            side: BorderSide(color: colorPallete.fontColor, width: 2)),
+                            side: BorderSide(
+                                color: colorPallete.fontColor, width: 2)),
                         child: Text(
                           'Login',
-                          style: TextStyle(color: colorPallete.fontColor, fontSize: 20),
+                          style: TextStyle(
+                              color: colorPallete.fontColor, fontSize: 20),
                         ),
                       ),
                     ],
@@ -212,6 +205,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-    );
+          );
   }
 }
