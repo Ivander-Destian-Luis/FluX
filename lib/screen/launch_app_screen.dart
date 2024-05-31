@@ -38,7 +38,7 @@ class _LaunchAppScreenState extends State<LaunchAppScreen> {
     Future.delayed(const Duration(seconds: 2)).then(
       (value) {
         if (FirebaseAuth.instance.currentUser != null) {
-          Navigator.popAndPushNamed(context, '/home');
+          Navigator.popAndPushNamed(context, '/main');
         } else {
           Navigator.popAndPushNamed(context, '/login');
         }
