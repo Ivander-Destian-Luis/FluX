@@ -12,7 +12,6 @@ class PostCard extends StatefulWidget {
   final ColorPallete colorPallete;
   final String uid;
   final Posting post;
-
   final String? postingImageUrl;
 
   const PostCard(
@@ -29,12 +28,12 @@ class PostCard extends StatefulWidget {
 class _PostBoxState extends State<PostCard> {
   Account? account;
   bool? _isLiked;
-
+  bool isFollowing = false;
   bool _isLoading = true;
   int commentsLength = 0;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initialize();
   }
@@ -58,6 +57,26 @@ class _PostBoxState extends State<PostCard> {
       setState(() {
         _isLoading = false;
       });
+    });
+    if (widget.uid != FirebaseAuth.instance.currentUser!.uid) {
+      isFollowing = await PostService.isFollowing(
+          FirebaseAuth.instance.currentUser!.uid, widget.post.posterUid!);
+    }
+    setState(() {
+      isFollowing = isFollowing;
+    });
+  }
+
+  void toggleFollow() async {
+    if (isFollowing) {
+      await PostService.unfollow(
+          FirebaseAuth.instance.currentUser!.uid, widget.post.posterUid!);
+    } else {
+      await PostService.follow(
+          FirebaseAuth.instance.currentUser!.uid, widget.post.posterUid!);
+    }
+    setState(() {
+      isFollowing = !isFollowing;
     });
   }
 
@@ -102,14 +121,26 @@ class _PostBoxState extends State<PostCard> {
                                     style: TextStyle(
                                         color: widget.colorPallete.fontColor),
                                   ),
-                                  Text(
-                                    '${DateTime.now().difference(widget.post.postedTime).inDays > 0 ? '${DateTime.now().difference(widget.post.postedTime).inDays}d ' : ''}${DateTime.now().difference(widget.post.postedTime).inHours > 0 ? '${DateTime.now().difference(widget.post.postedTime).inHours % 24}h ' : ''}${DateTime.now().difference(widget.post.postedTime).inMinutes > 0 ? "${DateTime.now().difference(widget.post.postedTime).inMinutes % 60}m" : "${DateTime.now().difference(widget.post.postedTime).inSeconds % 60}s"}',
-                                    style: TextStyle(
-                                      color: widget.colorPallete.fontColor
-                                          .withOpacity(0.4),
+                                  const SizedBox(width: 4),
+                                  if (widget.uid !=
+                                      FirebaseAuth.instance.currentUser!.uid)
+                                    TextButton(
+                                      onPressed: toggleFollow,
+                                      child: Text(
+                                          isFollowing ? 'Unfollow' : 'Follow'),
+                                      style: TextButton.styleFrom(
+                                        foregroundColor:
+                                            widget.colorPallete.textLinkColor,
+                                      ),
                                     ),
-                                  ),
                                 ],
+                              ),
+                              Text(
+                                '${DateTime.now().difference(widget.post.postedTime).inDays > 0 ? '${DateTime.now().difference(widget.post.postedTime).inDays}d ' : ''}${DateTime.now().difference(widget.post.postedTime).inHours > 0 ? '${DateTime.now().difference(widget.post.postedTime).inHours % 24}h ' : ''}${DateTime.now().difference(widget.post.postedTime).inMinutes > 0 ? "${DateTime.now().difference(widget.post.postedTime).inMinutes % 60}m" : "${DateTime.now().difference(widget.post.postedTime).inSeconds % 60}s"}',
+                                style: TextStyle(
+                                  color: widget.colorPallete.fontColor
+                                      .withOpacity(0.4),
+                                ),
                               ),
                               Text(
                                 widget.post.location ?? '',

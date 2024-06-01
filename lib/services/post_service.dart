@@ -225,4 +225,33 @@ class PostService {
 
     return length;
   }
+
+  static Future<void> follow(String uid, String postId) async {
+    try {
+      await _database.child(postId).child('followers').update({uid: true});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<void> unfollow(String uid, String postId) async {
+    try {
+      await _database.child(postId).child('followers').update({uid: false});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<bool> isFollowing(String uid, String postId) async {
+    try {
+      DataSnapshot snapshot =
+          await _database.child(postId).child('followers').child(uid).get();
+      if (snapshot.exists) {
+        return snapshot.value as bool;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
 }
