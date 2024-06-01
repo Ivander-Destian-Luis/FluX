@@ -1,5 +1,6 @@
 {
-    "accessibility.signals.sounds.volume": 0,
-    "editor.defaultFormatter": null,
-    "editor.formatOnSave": true
+  "accessibility.signals.sounds.volume": 0,
+  "editor.defaultFormatter": null,
+  "editor.formatOnSave": true,
+  "java.configuration.updateBuildConfiguration": "interactive"
 }

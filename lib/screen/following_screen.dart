@@ -2,18 +2,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
+import 'package:flux/screen/home_screen.dart';
 import 'package:flux/screen/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FollowingScreen extends StatefulWidget {
-  const FollowingScreen({super.key});
+  const FollowingScreen({super.key, required Account account});
 
   @override
   State<FollowingScreen> createState() => _FollowingScreenState();
 }
 
 class _FollowingScreenState extends State<FollowingScreen> {
-late ColorPallete colorPallete;
+  late ColorPallete colorPallete;
   late Account account;
   late SharedPreferences prefs;
   bool _isLoading = true;
@@ -56,11 +57,7 @@ late ColorPallete colorPallete;
                         size: 40,
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfileScreen()),
-                        );
+                        Navigator.pop(context);
                       },
                     ),
                   ],
@@ -72,11 +69,12 @@ late ColorPallete colorPallete;
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(
-                               left: 30.0, right: 30.0),
+                          padding: EdgeInsets.only(left: 30.0, right: 30.0),
                           child: Text('Following',
                               style: TextStyle(
-                                  fontSize: 32, color: colorPallete.fontColor, fontWeight: FontWeight.bold)),
+                                  fontSize: 32,
+                                  color: colorPallete.fontColor,
+                                  fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),

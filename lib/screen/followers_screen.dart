@@ -3,20 +3,21 @@ import 'package:flutter/widgets.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/screen/home_screen.dart';
+import 'package:flux/screen/launch_app_screen.dart';
 import 'package:flux/screen/login_screen.dart';
 import 'package:flux/screen/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FollowersScreen extends StatefulWidget {
-  const FollowersScreen({super.key});
+  const FollowersScreen({super.key, required Account account});
 
   @override
   State<FollowersScreen> createState() => _FollowersScreenState();
 }
 
 class _FollowersScreenState extends State<FollowersScreen> {
-late ColorPallete colorPallete;
+  late ColorPallete colorPallete;
   late Account account;
   late SharedPreferences prefs;
   bool _isLoading = true;
@@ -59,11 +60,7 @@ late ColorPallete colorPallete;
                         size: 40,
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfileScreen()),
-                        );
+                        Navigator.pop(context);
                       },
                     ),
                   ],
@@ -75,11 +72,12 @@ late ColorPallete colorPallete;
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(
-                               left: 30.0, right: 30.0),
+                          padding: EdgeInsets.only(left: 30.0, right: 30.0),
                           child: Text('Followers',
                               style: TextStyle(
-                                  fontSize: 32, color: colorPallete.fontColor, fontWeight: FontWeight.bold)),
+                                  fontSize: 32,
+                                  color: colorPallete.fontColor,
+                                  fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),

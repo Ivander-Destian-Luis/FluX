@@ -58,11 +58,7 @@ class _SavedScreenState extends State<SavedScreen> {
                         size: 40,
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeScreen()),
-                        );
+                        Navigator.pop(context);
                       },
                     ),
                   ],
@@ -74,11 +70,12 @@ class _SavedScreenState extends State<SavedScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(
-                               left: 30.0, right: 30.0),
+                          padding: EdgeInsets.only(left: 30.0, right: 30.0),
                           child: Text('Saved Post',
                               style: TextStyle(
-                                  fontSize: 32, color: colorPallete.fontColor, fontWeight: FontWeight.bold)),
+                                  fontSize: 32,
+                                  color: colorPallete.fontColor,
+                                  fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),

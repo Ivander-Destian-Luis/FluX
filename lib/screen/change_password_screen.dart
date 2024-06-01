@@ -101,10 +101,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
-                    );
+                    Navigator.pop(context);
                   },
                 ),
                 Column(
