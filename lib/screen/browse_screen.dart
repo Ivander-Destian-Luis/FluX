@@ -47,12 +47,14 @@ class _BrowseScreenState extends State<BrowseScreen> {
   }
 
   void getUsername(uid) async {
+    print('user atas');
     acc ??=
         await AccountService.getAccountByUid(uid).whenComplete(() {
       setState(() {
         _isLoading = false;
       });
     });
+    print('user bawah');
   }
 
   @override
