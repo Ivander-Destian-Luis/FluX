@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/models/posting.dart';
@@ -10,15 +11,13 @@ import 'package:flux/widgets/comment_card.dart';
 
 class UserCard extends StatefulWidget {
   final ColorPallete colorPallete;
-  final String uid;
-  final Posting post;
+  final Account account;
 
-
-  const UserCard(
-      {super.key,
-      required this.colorPallete,
-      required this.uid,
-      required this.post,});
+  const UserCard({
+    super.key,
+    required this.colorPallete,
+    required this.account,
+  });
 
   @override
   State<UserCard> createState() => _PostBoxState();
@@ -28,7 +27,7 @@ class _PostBoxState extends State<UserCard> {
   Account? account;
 
   bool _isLoading = true;
-  int commentsLength = 0;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -37,11 +36,9 @@ class _PostBoxState extends State<UserCard> {
   }
 
   void initialize() async {
-    account ??=
-        await AccountService.getAccountByUid(widget.uid).whenComplete(() {
-      setState(() {
-        _isLoading = false;
-      });
+    account = widget.account;
+    setState(() {
+      _isLoading = false;
     });
   }
 
@@ -61,11 +58,11 @@ class _PostBoxState extends State<UserCard> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        // Navigator.push(
-                            // context,
-                            // MaterialPageRoute(
-                            //     builder: (context) =>
-                            //         ProfileScreen(account: account!)));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProfileScreen(account: account!)));
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -76,7 +73,9 @@ class _PostBoxState extends State<UserCard> {
                                       NetworkImage(account!.profilePictureUrl),
                                 )
                               : const CircleAvatar(),
-                          const SizedBox(width: 10,),
+                          const SizedBox(
+                            width: 10,
+                          ),
                           Column(
                             children: [
                               Row(

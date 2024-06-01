@@ -128,10 +128,10 @@ class AccountService {
       for (var doc in snapshot.docs) {
         final data = doc.data() as Map<String, dynamic>;
         if (data['username']
-                .toString()
-                .substring(0, username.length)
-                .toLowerCase() ==
-            username.toLowerCase()) {
+            .toString()
+            .substring(0, username.length)
+            .toLowerCase()
+            .contains(username.toLowerCase())) {
           accountsUid.add((await getAccountByUid(doc.id))!);
         }
       }

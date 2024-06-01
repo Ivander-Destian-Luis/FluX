@@ -8,6 +8,7 @@ import 'package:flux/services/account_service.dart';
 import 'package:flux/services/post_service.dart';
 import 'package:flux/widgets/post_card.dart';
 import 'package:flux/widgets/user_card.dart';
+import 'package:flux/widgets/user_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BrowseScreen extends StatefulWidget {
@@ -20,11 +21,11 @@ class BrowseScreen extends StatefulWidget {
 class _BrowseScreenState extends State<BrowseScreen> {
   late ColorPallete colorPallete;
   late Account account;
-  Account? acc;
+  // List<Account> foundAcc = [];
   late SharedPreferences prefs;
   bool _isLoading = true;
   String searchResult = '';
-  
+  List<Account> foundAcc = [];
 
   void initialize() async {
     prefs = await SharedPreferences.getInstance().then((value) async {
@@ -32,7 +33,10 @@ class _BrowseScreenState extends State<BrowseScreen> {
           ? DarkModeColorPallete()
           : LightModeColorPallete();
 
-      account = (await AccountService.getAccountByUid(FirebaseAuth.instance.currentUser!.uid))!;
+      account = (await AccountService.getAccountByUid(
+          FirebaseAuth.instance.currentUser!.uid))!;
+
+      foundAcc = await AccountService.getAccountsByUsername('');
 
       setState(() {
         _isLoading = false;
@@ -47,30 +51,21 @@ class _BrowseScreenState extends State<BrowseScreen> {
     initialize();
   }
 
-  void getUsername(uid) async {
-    acc ??=
-        await AccountService.getAccountByUid(uid).whenComplete(() {
-      setState(() {
-        _isLoading = false;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return _isLoading
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
-          appBar: AppBar(
-            title: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: colorPallete.textFieldBackgroundColor,
-              ),
-              child: TextField(
-                onChanged: (value) => setState(() {
-                  searchResult = value;
-                }),
+            appBar: AppBar(
+              title: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: colorPallete.textFieldBackgroundColor,
+                ),
+                child: TextField(
+                  onChanged: (value) => setState(() {
+                    searchResult = value;
+                  }),
                   autofocus: false,
                   decoration: const InputDecoration(
                     hintText: 'Find user...',
@@ -88,71 +83,57 @@ class _BrowseScreenState extends State<BrowseScreen> {
               ),
             ),
             backgroundColor: colorPallete.backgroundColor,
-            body: searchResult == '' ? Column(
-                children: [
-                  Expanded(
-                    child: StreamBuilder(
-                      stream: PostService.getPostingList(),
-                      builder: (context, snapshot) {
-                        // ignore: unnecessary_cast
-                        List<Posting> posts = (snapshot.data ??
-                            List<Posting>.empty()) as List<Posting>;
-                        List<Widget> postingBoxes = [];
-                        for (Posting post in posts) {
-                          getUsername(post.posterUid);
+            body: searchResult == ''
+                ? Column(
+                    children: [
+                      Expanded(
+                        child: StreamBuilder(
+                          stream: PostService.getPostingList(),
+                          builder: (context, snapshot) {
+                            // ignore: unnecessary_cast
+                            List<Posting> posts = (snapshot.data ??
+                                List<Posting>.empty()) as List<Posting>;
+                            List<Widget> postingBoxes = [];
+                            for (Posting post in posts) {
                               postingBoxes.add(PostCard(
-                              colorPallete: colorPallete,
-                              uid: post.posterUid!,
-                              post: post,
+                                colorPallete: colorPallete,
+                                uid: post.posterUid!,
+                                post: post,
                               ));
-                            postingBoxes.add(const SizedBox(height: 10));
-                        }
-                        return ListView(
-                          children: postingBoxes,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ) :
-              Column(
-                children: [
-                  Expanded(
-                    child: StreamBuilder(
-                      stream: PostService.getPostingList(),
-                      builder: (context, snapshot) {
-                        // ignore: unnecessary_cast
-                        List<Posting> posts = (snapshot.data ??
-                            List<Posting>.empty()) as List<Posting>;
-                        List<Widget> postingBoxes = [];
-                        List<String?> searched = [];
-                        for (Posting post in posts) {
-                          getUsername(post.posterUid);
-                          bool added = false;
-                          for (String? search in searched) {
-                            if(post.posterUid == search) {
-                              added == true;
-                              break;
+                              postingBoxes.add(const SizedBox(height: 10));
                             }
+                            return ListView(
+                              children: postingBoxes,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      Expanded(
+                          child: ListView.builder(
+                        itemCount: foundAcc.length,
+                        itemBuilder: (context, index) {
+                          if (foundAcc[index]
+                              .username
+                              .toLowerCase()
+                              .contains(searchResult.toLowerCase())) {
+                            return Column(children: [
+                              UserCard(
+                                colorPallete: colorPallete,
+                                account: foundAcc[index],
+                              ),
+                              const SizedBox(height: 10)
+                            ]);
+                          } else {
+                            return const SizedBox(height: 0);
                           }
-                          if(acc!.username.toLowerCase().contains(searchResult.toLowerCase()) && !added) {
-                            postingBoxes.add(UserCard(
-                              colorPallete: colorPallete,
-                              uid: post.posterUid!,
-                              post: post,
-                            ));
-                            postingBoxes.add(const SizedBox(height: 10));
-                            searched.add(post.posterUid);
-                          }
-                        }
-                        return ListView(
-                          children: postingBoxes,
-                        );
-                      },
-                    ),
+                        },
+                      )),
+                    ],
                   ),
-                ],
-              ),
-            );
+          );
   }
 }
