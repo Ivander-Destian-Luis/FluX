@@ -11,20 +11,21 @@ import 'package:flux/widgets/comment_card.dart';
 class UserCard extends StatefulWidget {
   final ColorPallete colorPallete;
   final String uid;
+  final Posting post;
+
 
   const UserCard(
       {super.key,
       required this.colorPallete,
       required this.uid,
-      });
+      required this.post,});
 
   @override
-  State <UserCard> createState() => _PostBoxState();
+  State<UserCard> createState() => _PostBoxState();
 }
 
-class _PostBoxState extends State <UserCard> {
+class _PostBoxState extends State<UserCard> {
   Account? account;
-  bool? _isLiked;
 
   bool _isLoading = true;
   int commentsLength = 0;
@@ -57,17 +58,17 @@ class _PostBoxState extends State <UserCard> {
               alignment: Alignment.topRight,
               children: [
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
                       onTap: () {
                         // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) =>
-                        //             ProfileScreen(account: account!)));
+                            // context,
+                            // MaterialPageRoute(
+                            //     builder: (context) =>
+                            //         ProfileScreen(account: account!)));
                       },
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           account!.profilePictureUrl.isNotEmpty
                               ? CircleAvatar(
@@ -75,39 +76,22 @@ class _PostBoxState extends State <UserCard> {
                                       NetworkImage(account!.profilePictureUrl),
                                 )
                               : const CircleAvatar(),
-                          Text(
-                            account!.username,
-                            style:
-                                TextStyle(color: widget.colorPallete.fontColor),
-                          ),
-                          Text(
-                            '1h',
-                            style: TextStyle(
-                              color: widget.colorPallete.fontColor
-                                  .withOpacity(0.4),
-                            ),
+                          const SizedBox(width: 10,),
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    account!.username,
+                                    style: TextStyle(
+                                        color: widget.colorPallete.fontColor),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ),
-                    Row(
-                      children: [
-                        Column(
-                          children: [
-                            Text(commentsLength.toString(),
-                                style: TextStyle(
-                                    color: widget.colorPallete.fontColor)),
-                          ],
-                        ),
-                        GestureDetector(
-                          child: Icon(Icons.share,
-                              color: widget.colorPallete.fontColor),
-                        ),
-                        GestureDetector(
-                          child: Icon(Icons.bookmark,
-                              color: widget.colorPallete.fontColor),
-                        ),
-                      ],
                     ),
                   ],
                 ),

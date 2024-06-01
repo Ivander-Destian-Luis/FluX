@@ -48,14 +48,12 @@ class _BrowseScreenState extends State<BrowseScreen> {
   }
 
   void getUsername(uid) async {
-    print('user atas');
     acc ??=
         await AccountService.getAccountByUid(uid).whenComplete(() {
       setState(() {
         _isLoading = false;
       });
     });
-    print('user bawah');
   }
 
   @override
@@ -127,13 +125,25 @@ class _BrowseScreenState extends State<BrowseScreen> {
                         List<Posting> posts = (snapshot.data ??
                             List<Posting>.empty()) as List<Posting>;
                         List<Widget> postingBoxes = [];
+                        List<String?> searched = [];
                         for (Posting post in posts) {
                           getUsername(post.posterUid);
-                              postingBoxes.add(UserCard(
+                          bool added = false;
+                          for (String? search in searched) {
+                            if(post.posterUid == search) {
+                              added == true;
+                              break;
+                            }
+                          }
+                          if(acc!.username.toLowerCase().contains(searchResult.toLowerCase()) && !added) {
+                            postingBoxes.add(UserCard(
                               colorPallete: colorPallete,
                               uid: post.posterUid!,
-                              ));
+                              post: post,
+                            ));
                             postingBoxes.add(const SizedBox(height: 10));
+                            searched.add(post.posterUid);
+                          }
                         }
                         return ListView(
                           children: postingBoxes,
