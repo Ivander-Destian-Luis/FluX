@@ -7,6 +7,7 @@ import 'package:flux/models/posting.dart';
 import 'package:flux/services/account_service.dart';
 import 'package:flux/services/post_service.dart';
 import 'package:flux/widgets/post_card.dart';
+import 'package:flux/widgets/user_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BrowseScreen extends StatefulWidget {
@@ -89,7 +90,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
               ),
             ),
             backgroundColor: colorPallete.backgroundColor,
-            body: Column(
+            body: searchResult == '' ? Column(
                 children: [
                   Expanded(
                     child: StreamBuilder(
@@ -101,13 +102,11 @@ class _BrowseScreenState extends State<BrowseScreen> {
                         List<Widget> postingBoxes = [];
                         for (Posting post in posts) {
                           getUsername(post.posterUid);
-                            if(acc!.username.toLowerCase().contains(searchResult.toLowerCase())) {
                               postingBoxes.add(PostCard(
                               colorPallete: colorPallete,
                               uid: post.posterUid!,
                               post: post,
                               ));
-                            }
                             postingBoxes.add(const SizedBox(height: 10));
                         }
                         return ListView(
@@ -117,7 +116,33 @@ class _BrowseScreenState extends State<BrowseScreen> {
                     ),
                   ),
                 ],
-              )
+              ) :
+              Column(
+                children: [
+                  Expanded(
+                    child: StreamBuilder(
+                      stream: PostService.getPostingList(),
+                      builder: (context, snapshot) {
+                        // ignore: unnecessary_cast
+                        List<Posting> posts = (snapshot.data ??
+                            List<Posting>.empty()) as List<Posting>;
+                        List<Widget> postingBoxes = [];
+                        for (Posting post in posts) {
+                          getUsername(post.posterUid);
+                              postingBoxes.add(UserCard(
+                              colorPallete: colorPallete,
+                              uid: post.posterUid!,
+                              ));
+                            postingBoxes.add(const SizedBox(height: 10));
+                        }
+                        return ListView(
+                          children: postingBoxes,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             );
   }
 }
