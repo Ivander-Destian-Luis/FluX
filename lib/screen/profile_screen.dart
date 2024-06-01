@@ -310,7 +310,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   List<Posting>.empty()) as List<Posting>;
                               List<Widget> postingBoxes = [];
                               for (Posting post in posts) {
-                                if (post.posterUid == _accountUid) {
+                                if (post.posterUid == _targetUid) {
                                   postingBoxes.add(PostCard(
                                     colorPallete: colorPallete,
                                     uid: post.posterUid!,

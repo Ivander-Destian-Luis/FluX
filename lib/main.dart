@@ -11,7 +11,6 @@ import 'package:flux/screen/login_screen.dart';
 import 'package:flux/screen/main_screen.dart';
 import 'package:flux/screen/notification_screen.dart';
 import 'package:flux/screen/posting_screen.dart';
-import 'package:flux/screen/profile_screen.dart';
 import 'package:flux/screen/register_screen.dart';
 import 'package:flux/screen/saved_screen.dart';
 import 'package:flux/screen/settings_screen.dart';

@@ -23,10 +23,10 @@ class PostCard extends StatefulWidget {
       this.postingImageUrl});
 
   @override
-  State <PostCard> createState() => _PostBoxState();
+  State<PostCard> createState() => _PostBoxState();
 }
 
-class _PostBoxState extends State <PostCard> {
+class _PostBoxState extends State<PostCard> {
   Account? account;
   bool? _isLiked;
 
@@ -78,11 +78,11 @@ class _PostBoxState extends State <PostCard> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) =>
-                        //             ProfileScreen(account: account!)));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProfileScreen(account: account!)));
                       },
                       child: Row(
                         children: [
@@ -99,8 +99,8 @@ class _PostBoxState extends State <PostCard> {
                                 children: [
                                   Text(
                                     account!.username,
-                                    style:
-                                        TextStyle(color: widget.colorPallete.fontColor),
+                                    style: TextStyle(
+                                        color: widget.colorPallete.fontColor),
                                   ),
                                   Text(
                                     '${DateTime.now().difference(widget.post.postedTime).inDays > 0 ? '${DateTime.now().difference(widget.post.postedTime).inDays}d ' : ''}${DateTime.now().difference(widget.post.postedTime).inHours > 0 ? '${DateTime.now().difference(widget.post.postedTime).inHours % 24}h ' : ''}${DateTime.now().difference(widget.post.postedTime).inMinutes > 0 ? "${DateTime.now().difference(widget.post.postedTime).inMinutes % 60}m" : "${DateTime.now().difference(widget.post.postedTime).inSeconds % 60}s"}',
@@ -111,7 +111,12 @@ class _PostBoxState extends State <PostCard> {
                                   ),
                                 ],
                               ),
-                              Text(widget.post.location, style: TextStyle(fontSize: 10, color: widget.colorPallete.textLinkColor),),
+                              Text(
+                                widget.post.location ?? '',
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: widget.colorPallete.textLinkColor),
+                              ),
                             ],
                           ),
                         ],
@@ -306,18 +311,15 @@ class _PostBoxState extends State <PostCard> {
                                               ),
                                               onSubmitted: (value) {
                                                 if (value.isNotEmpty) {
-                                                      PostService.comment(
-                                                              FirebaseAuth
-                                                                  .instance
-                                                                  .currentUser!
-                                                                  .uid, 
-                                                              value,
-                                                              widget.post)
-                                                          .whenComplete(() {
-                                                        initialize();
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      });
+                                                  PostService.comment(
+                                                          FirebaseAuth.instance
+                                                              .currentUser!.uid,
+                                                          value,
+                                                          widget.post)
+                                                      .whenComplete(() {
+                                                    initialize();
+                                                    Navigator.of(context).pop();
+                                                  });
                                                 }
                                               },
                                               style: TextStyle(

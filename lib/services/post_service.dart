@@ -21,7 +21,7 @@ class PostService {
             final data = value as Map<Object?, Object?>;
             Map<String, dynamic> accountData = {};
             bool likesExisted = false;
-            bool commentsExisted= false;
+            bool commentsExisted = false;
             data.forEach((key, value) {
               if (key.toString() == 'likes') {
                 likesExisted = true;
@@ -63,7 +63,6 @@ class PostService {
         }
       } catch (e) {
         print(e);
-        print("error");
       }
       return items;
     });
@@ -84,10 +83,12 @@ class PostService {
         'postedTime': DateTime.now().toString(),
       });
 
+      print("Berhasil");
+
       statusCode = 200;
     } catch (e) {
       statusCode = 401;
-      print(e);
+      print("Errorr");
     }
 
     return statusCode;

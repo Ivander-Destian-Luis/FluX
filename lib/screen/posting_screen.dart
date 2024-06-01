@@ -30,7 +30,7 @@ class _PostingScreenState extends State<PostingScreen> {
   Position? position;
 
   bool _isLoading = true;
-  String _location = "";
+  String? _location;
 
   Future<void> _pickImage() async {
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
@@ -43,7 +43,8 @@ class _PostingScreenState extends State<PostingScreen> {
 
   void _pickLocation() async {
     position = await LocationService.getCurrentPosition();
-    List<Placemark> placemarks = await GeocodingPlatform.instance!.placemarkFromCoordinates(position!.latitude, position!.longitude);
+    List<Placemark> placemarks = await GeocodingPlatform.instance!
+        .placemarkFromCoordinates(position!.latitude, position!.longitude);
     setState(() {
       _location = "${placemarks[0].subAdministrativeArea}";
     });
@@ -69,22 +70,24 @@ class _PostingScreenState extends State<PostingScreen> {
       postImageUrl = await PostService.addPostingImage(_imageFile);
     }
     Posting post = Posting(
-        postingDescription: description,
-        location: _location,
-        likes: [],
-        latitude: position!.latitude,
-        longitude: position!.longitude,
-        comments: {},
-        postedTime: DateTime.now(),
-        postId: null,
-        posterUid: FirebaseAuth.instance.currentUser!.uid);
+      postingDescription: description,
+      location: _location,
+      likes: [],
+      latitude: position?.latitude,
+      longitude: position?.longitude,
+      comments: {},
+      postedTime: DateTime.now(),
+      postId: null,
+      posterUid: FirebaseAuth.instance.currentUser!.uid,
+      postingImageUrl: postImageUrl,
+    );
 
-    int statusCode = await PostService.post(post, FirebaseAuth.instance.currentUser!.uid);
+    int statusCode =
+        await PostService.post(post, FirebaseAuth.instance.currentUser!.uid);
 
     if (statusCode == 200) {
       Navigator.pushReplacementNamed(context, '/main');
-    }
-    else {
+    } else {
       print("LOL");
     }
   }
@@ -121,7 +124,9 @@ class _PostingScreenState extends State<PostingScreen> {
                     child: Text(
                       'Post',
                       style: TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold, color: colorPallete.textLinkColor),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: colorPallete.textLinkColor),
                     ),
                   )
                 ],
@@ -178,14 +183,19 @@ class _PostingScreenState extends State<PostingScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 20),
                         child: Text(
-                          _location.isEmpty ? "Pilih Lokasi" : _location,
-                          style: const TextStyle(fontSize: 16),
+                          _location == null ? "Pilih Lokasi" : _location!,
+                          style: TextStyle(
+                              fontSize: 16, color: colorPallete.fontColor),
                         ),
                       ),
                       IconButton(
                           onPressed: () async {
                             _pickLocation();
-                          }, icon: const Icon(Icons.location_on)),
+                          },
+                          icon: Icon(
+                            Icons.location_on,
+                            color: colorPallete.fontColor,
+                          )),
                     ],
                   ),
                   Padding(
@@ -195,7 +205,8 @@ class _PostingScreenState extends State<PostingScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 10, bottom: 10),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -221,8 +232,8 @@ class _PostingScreenState extends State<PostingScreen> {
                       controller: _descriptionController,
                       cursorColor: colorPallete.textFieldTextColor,
                       decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          ),
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
                 ],
