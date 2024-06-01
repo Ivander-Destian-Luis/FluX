@@ -4,18 +4,19 @@ import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/screen/home_screen.dart';
 import 'package:flux/screen/login_screen.dart';
+import 'package:flux/screen/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SavedScreen extends StatefulWidget {
-  const SavedScreen({super.key});
+class FollowersScreen extends StatefulWidget {
+  const FollowersScreen({super.key});
 
   @override
-  State<SavedScreen> createState() => _SavedScreenState();
+  State<FollowersScreen> createState() => _FollowersScreenState();
 }
 
-class _SavedScreenState extends State<SavedScreen> {
-  late ColorPallete colorPallete;
+class _FollowersScreenState extends State<FollowersScreen> {
+late ColorPallete colorPallete;
   late Account account;
   late SharedPreferences prefs;
   bool _isLoading = true;
@@ -61,7 +62,7 @@ class _SavedScreenState extends State<SavedScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => HomeScreen()),
+                              builder: (context) => ProfileScreen()),
                         );
                       },
                     ),
@@ -76,7 +77,7 @@ class _SavedScreenState extends State<SavedScreen> {
                         Padding(
                           padding: EdgeInsets.only(
                                left: 30.0, right: 30.0),
-                          child: Text('Saved Post',
+                          child: Text('Followers',
                               style: TextStyle(
                                   fontSize: 32, color: colorPallete.fontColor, fontWeight: FontWeight.bold)),
                         ),
