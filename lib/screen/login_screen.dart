@@ -31,58 +31,50 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void initialize() async {
-    prefs = await SharedPreferences.getInstance().then((value) async {
-      colorPallete = value.getBool('isDarkMode') ?? true
-          ? DarkModeColorPallete()
-          : LightModeColorPallete();
+    if (FirebaseAuth.instance.currentUser != null) {
+      Navigator.pushReplacementNamed(context, '/main');
+    } else {
+      prefs = await SharedPreferences.getInstance().then((value) async {
+        colorPallete = value.getBool('isDarkMode') ?? false
+            ? DarkModeColorPallete()
+            : LightModeColorPallete();
 
-      setState(() {
-        _isLoading = false;
-      });
-      return value;
-    });
-  }
-
-  Future<void> _signIn() async {
-    try {
-      final String userEmail = _emailController.text;
-      final String password = _passwordController.text;
-
-      if (userEmail.isNotEmpty && password.isNotEmpty) {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: userEmail,
-          password: password,
-        );
-
-        _saveLoginStatus();
-
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        Navigator.pushReplacementNamed(context, '/home_screen');
-      } else {
         setState(() {
-          _errorText = 'Email and password cannot be empty';
+          _isLoading = false;
         });
-      }
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        _errorText = 'Email or password is incorrect';
+        return value;
       });
     }
   }
 
-  Future<void> _saveLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isLoggedIn', true);
+  Future<void> _signIn() async {
+    final String userEmail = _emailController.text;
+    final String password = _passwordController.text;
+
+    if (userEmail.isNotEmpty && password.isNotEmpty) {
+      int statusCode = await AuthenticationService.login(userEmail, password);
+
+      if (statusCode == 200) {
+        Navigator.pushReplacementNamed(context, '/main');
+      } else {
+        setState(() {
+          _errorText = "Email or Password is incorrect";
+        });
+      }
+    } else {
+      setState(() {
+        _errorText = 'Email and password cannot be empty';
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: colorPallete.backgroundColor,
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
+    return _isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : Scaffold(
+            backgroundColor: colorPallete.backgroundColor,
+            body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -162,11 +154,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.pushReplacementNamed(
-                                context, '/forgotPassword_screen');
+                                context, '/forgotPassword');
                           },
                           child: Text(
                             'Forgot Password',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: colorPallete.fontColor),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: colorPallete.fontColor),
                           ),
                         ),
                       ),
@@ -175,11 +169,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.pushReplacementNamed(
-                                context, '/register_screen');
+                                context, '/register');
                           },
                           child: Text(
                             'Don\'t Have Account?',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: colorPallete.fontColor),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: colorPallete.fontColor),
                           ),
                         ),
                       ),
@@ -196,10 +192,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: colorPallete.backgroundColor,
                             fixedSize: const Size(350, 50),
-                            side: BorderSide(color: colorPallete.fontColor, width: 2)),
+                            side: BorderSide(
+                                color: colorPallete.fontColor, width: 2)),
                         child: Text(
                           'Login',
-                          style: TextStyle(color: colorPallete.fontColor, fontSize: 20),
+                          style: TextStyle(
+                              color: colorPallete.fontColor, fontSize: 20),
                         ),
                       ),
                     ],
@@ -207,6 +205,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-    );
+          );
   }
 }

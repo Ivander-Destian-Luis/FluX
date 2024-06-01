@@ -57,11 +57,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _errorTextForPassword = 'Harus mempunyai huruf Kapital !';
       });
       return;
-    } else if (!password.contains(RegExp(r'[0-9]'))) {
-      setState(() {
-        _errorTextForPassword = 'Harus mempunyai angka !';
-      });
-      return;
     } else if (password != confirmPassword) {
       setState(() {
         _errorTextForConfirmPassword = 'Invalid Credential';
@@ -86,8 +81,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
 
     if (email.isNotEmpty && password.isNotEmpty) {
-      await AuthenticationService.register(email, password);
-      Navigator.pushReplacementNamed(context, '/input_data');
+      int statusCode = await AuthenticationService.register(email, password);
+      if (statusCode == 200) {
+        Navigator.pushReplacementNamed(context, '/input_data');
+      } else if (statusCode == 401) {
+        setState(() {
+          _errorTextForEmail = 'Email telah digunakan!';
+        });
+      } else {
+        setState(() {
+          _errorTextForEmail = 'Error ditemukan!';
+        });
+      }
     }
   }
 
@@ -197,7 +202,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       'Already Have Account ?',
                       style: TextStyle(color: Colors.blue),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushReplacementNamed(context, '/login');
+                    },
                   ),
                 ),
                 Padding(
