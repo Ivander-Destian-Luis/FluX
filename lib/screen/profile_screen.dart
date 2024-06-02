@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/models/posting.dart';
+import 'package:flux/screen/edit_data_screen.dart';
 
 import 'package:flux/services/account_service.dart';
 import 'package:flux/services/authentication_service.dart';
@@ -25,6 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late SharedPreferences prefs;
   late Account comerAccount;
   late Account ownerAccount;
+  late Account posterAccount;
   late String _accountUid;
   late String _targetUid;
 
@@ -49,6 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _targetUid =
           (await AccountService.getUidByUsername(ownerAccount.username))!;
       ownerAccount = (await AccountService.getAccountByUid(_targetUid))!;
+
       setState(() {
         _isLoading = false;
         ownerAccount = ownerAccount;
@@ -74,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Row(
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(left: 10, top: 10),
+                            padding: const EdgeInsets.only(left: 10, top: 10),
                             child: CircleAvatar(
                               backgroundImage:
                                   NetworkImage(ownerAccount.profilePictureUrl),
@@ -85,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: EdgeInsets.only(
+                                padding: const EdgeInsets.only(
                                     left: 20, bottom: 10, top: 10),
                                 child: Text(ownerAccount.username,
                                     style: TextStyle(
@@ -97,7 +101,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Column(
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.only(left: 10),
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
                                         child: Text(
                                             ownerAccount.followers.length
                                                 .toString(),
@@ -107,7 +112,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 fontSize: 15)),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: 10),
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
                                         child: Text('Followers',
                                             style: TextStyle(
                                                 color: colorPallete.fontColor,
@@ -118,7 +124,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Column(
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.only(left: 20),
+                                        padding:
+                                            const EdgeInsets.only(left: 20),
                                         child: Text(
                                             ownerAccount.followings.length
                                                 .toString(),
@@ -128,7 +135,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 fontSize: 15)),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: 20),
+                                        padding:
+                                            const EdgeInsets.only(left: 20),
                                         child: Text('Followings',
                                             style: TextStyle(
                                                 color: colorPallete.fontColor,
@@ -139,7 +147,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Column(
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.only(left: 20),
+                                        padding:
+                                            const EdgeInsets.only(left: 20),
                                         child: Text(
                                             ownerAccount.posts.toString(),
                                             style: TextStyle(
@@ -148,7 +157,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 fontWeight: FontWeight.bold)),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: 20),
+                                        padding:
+                                            const EdgeInsets.only(left: 20),
                                         child: Text('Posts',
                                             style: TextStyle(
                                                 color: colorPallete.fontColor,
@@ -163,7 +173,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                        padding: const EdgeInsets.only(
+                            left: 20, top: 10, bottom: 10),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text.rich(
@@ -177,6 +188,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       if (comerAccount.username == ownerAccount.username)
                         GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => EditDataScreen(
+                                  usernameProfile: ownerAccount.username,
+                                  phoneNumberProfile: ownerAccount.phoneNumber,
+                                  bioProfile: ownerAccount.bio,
+                                  imageLinkProfile:
+                                      ownerAccount.profilePictureUrl),
+                            ));
+                          },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 130),
@@ -259,7 +280,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               });
                             },
                             child: Padding(
-                              padding: EdgeInsets.only(top: 15),
+                              padding: const EdgeInsets.only(top: 15),
                               child: Text(
                                 'Posted',
                                 style: TextStyle(
@@ -279,7 +300,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               });
                             },
                             child: Padding(
-                              padding: EdgeInsets.only(top: 15),
+                              padding: const EdgeInsets.only(top: 15),
                               child: Text(
                                 'Liked',
                                 style: TextStyle(
@@ -295,12 +316,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 20, right: 20),
+                        padding: const EdgeInsets.only(left: 20, right: 20),
                         child: Divider(
                           color: colorPallete.borderColor,
                         ),
                       ),
-                      if (selectedOption == "posted") ...[
+                      if (selectedOption == 'posted') ...[
                         Expanded(
                           child: StreamBuilder(
                             stream: PostService.getPostingList(),
@@ -324,7 +345,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               );
                             },
                           ),
-                        ),
+                        )
+                      ] else if (selectedOption == 'liked') ...[
+                        Expanded(
+                          child: StreamBuilder(
+                            stream: PostService.getPostingList(),
+                            builder: (context, snapshot) {
+                              // ignore: unnecessary_cast
+                              List<Posting> posts = (snapshot.data ??
+                                  List<Posting>.empty()) as List<Posting>;
+                              List<Widget> postingBoxes = [];
+                              for (Posting post in posts) {
+                                if (post.likes.contains(_targetUid)) {
+                                  postingBoxes.add(PostCard(
+                                      colorPallete: colorPallete,
+                                      uid: post.posterUid!,
+                                      post: post));
+                                  postingBoxes.add(const SizedBox(height: 10));
+                                }
+                              }
+                              return ListView(
+                                children: postingBoxes,
+                              );
+                            },
+                          ),
+                        )
                       ]
                     ],
                   ),

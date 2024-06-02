@@ -23,7 +23,7 @@ class Account {
       bio: data['bio'] ?? '',
       followers: data['followers'] ?? List.empty(),
       followings: data['followings'] ?? List.empty(),
-      phoneNumber: data['phoneNumber'] ?? '',
+      phoneNumber: data['phone_number'] ?? '',
       posts: data['posts'] ?? 0,
       profilePictureUrl: data['profilePictureUrl'] ?? '',
       username: data['username'] ?? '',
