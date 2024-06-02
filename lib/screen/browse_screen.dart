@@ -19,11 +19,10 @@ class BrowseScreen extends StatefulWidget {
 class _BrowseScreenState extends State<BrowseScreen> {
   late ColorPallete colorPallete;
   late Account account;
-  // List<Account> foundAcc = [];
   late SharedPreferences prefs;
   bool _isLoading = true;
   String searchResult = '';
-  List<Account> foundAcc = [];
+  late List<Account> foundAcc = [];
 
   void initialize() async {
     prefs = await SharedPreferences.getInstance().then((value) async {

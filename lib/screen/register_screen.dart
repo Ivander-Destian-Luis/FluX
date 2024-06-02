@@ -111,12 +111,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             body: ListView(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     top: 140,
                     left: 20,
                   ),
                   child: Text(
-                    'Create New     Account',
+                    'Create New \nAccount',
                     style:
                         TextStyle(fontSize: 45, color: colorPallete.fontColor),
                   ),
