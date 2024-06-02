@@ -46,7 +46,6 @@ class MainApp extends StatelessWidget {
         '/main': (context) => const MainScreen(),
         '/launch': (context) => const LaunchAppScreen(),
         '/settings': (context) => const SettingsScreen(),
-        '/saved': (context) => const SavedScreen()
       },
     );
   }

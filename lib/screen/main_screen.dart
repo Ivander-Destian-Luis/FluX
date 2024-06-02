@@ -21,7 +21,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   // TODO: 1. Deklarasikan variabel
-  int _currentIndex = 0;
+  int _currentIndex = 1;
   late ColorPallete colorPallete;
   late Account account;
   late SharedPreferences prefs;
@@ -55,6 +55,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+
     initialize();
   }
 
