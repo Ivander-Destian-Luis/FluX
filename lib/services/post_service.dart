@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flux/models/account.dart';
 import 'package:flux/models/posting.dart';
+import 'package:flux/services/account_service.dart';
 
 class PostService {
   static final DatabaseReference _database =
@@ -81,6 +83,18 @@ class PostService {
         'longitude': posting.longitude,
         'comments': posting.comments,
         'postedTime': DateTime.now().toString(),
+      }).whenComplete(() async {
+        Account account = (await AccountService.getAccountByUid(
+            FirebaseAuth.instance.currentUser!.uid))!;
+        AccountService.edit(
+            FirebaseAuth.instance.currentUser!.uid,
+            account.username,
+            account.phoneNumber,
+            account.bio,
+            account.followings,
+            account.followers,
+            account.profilePictureUrl,
+            account.posts + 1);
       });
 
       print("Berhasil");

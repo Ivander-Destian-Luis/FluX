@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/models/posting.dart';
+import 'package:flux/screen/edit_data_screen.dart';
 
 import 'package:flux/services/account_service.dart';
 import 'package:flux/services/authentication_service.dart';
@@ -49,6 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _targetUid =
           (await AccountService.getUidByUsername(ownerAccount.username))!;
       ownerAccount = (await AccountService.getAccountByUid(_targetUid))!;
+
       setState(() {
         _isLoading = false;
         ownerAccount = ownerAccount;
@@ -177,6 +180,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       if (comerAccount.username == ownerAccount.username)
                         GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => EditDataScreen(
+                                  usernameProfile: ownerAccount.username,
+                                  phoneNumberProfile: ownerAccount.phoneNumber,
+                                  bioProfile: ownerAccount.bio,
+                                  imageLinkProfile:
+                                      ownerAccount.profilePictureUrl),
+                            ));
+                          },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 130),
@@ -300,32 +313,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: colorPallete.borderColor,
                         ),
                       ),
-                      if (selectedOption == "posted") ...[
-                        Expanded(
-                          child: StreamBuilder(
-                            stream: PostService.getPostingList(),
-                            builder: (context, snapshot) {
-                              // ignore: unnecessary_cast
-                              List<Posting> posts = (snapshot.data ??
-                                  List<Posting>.empty()) as List<Posting>;
-                              List<Widget> postingBoxes = [];
-                              for (Posting post in posts) {
-                                if (post.posterUid == _targetUid) {
-                                  postingBoxes.add(PostCard(
-                                    colorPallete: colorPallete,
-                                    uid: post.posterUid!,
-                                    post: post,
-                                  ));
-                                  postingBoxes.add(const SizedBox(height: 10));
-                                }
-                              }
-                              return ListView(
-                                children: postingBoxes,
-                              );
-                            },
-                          ),
-                        ),
-                      ]
+                      selectedOption == "posted"
+                          ? Expanded(
+                              child: StreamBuilder(
+                                stream: PostService.getPostingList(),
+                                builder: (context, snapshot) {
+                                  // ignore: unnecessary_cast
+                                  List<Posting> posts = (snapshot.data ??
+                                      List<Posting>.empty()) as List<Posting>;
+                                  List<Widget> postingBoxes = [];
+                                  for (Posting post in posts) {
+                                    if (post.posterUid == _targetUid) {
+                                      postingBoxes.add(PostCard(
+                                        colorPallete: colorPallete,
+                                        uid: post.posterUid!,
+                                        post: post,
+                                      ));
+                                      postingBoxes
+                                          .add(const SizedBox(height: 10));
+                                    }
+                                  }
+                                  return ListView(
+                                    children: postingBoxes,
+                                  );
+                                },
+                              ),
+                            )
+                          : Expanded(
+                              child: StreamBuilder(
+                                stream: PostService.getPostingList(),
+                                builder: (context, snapshot) {
+                                  // ignore: unnecessary_cast
+                                  List<Posting> posts = (snapshot.data ??
+                                      List<Posting>.empty()) as List<Posting>;
+                                  List<Widget> postingBoxes = [];
+                                  for (Posting post in posts) {
+                                    if (post.likes.contains(_targetUid)) {
+                                      postingBoxes.add(PostCard(
+                                        colorPallete: colorPallete,
+                                        uid: post.postId!,
+                                        post: post,
+                                      ));
+                                      postingBoxes
+                                          .add(const SizedBox(height: 10));
+                                    }
+                                  }
+                                  return ListView(
+                                    children: postingBoxes,
+                                  );
+                                },
+                              ),
+                            )
                     ],
                   ),
                   PopupMenuButton(
