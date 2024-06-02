@@ -54,11 +54,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Image(
-                    image: colorPallete.logo,
-                    fit: BoxFit.contain,
-                    height: 48,
-                  ),
+                  Text(
+                    style:
+                        TextStyle(color: colorPallete.fontColor, fontSize: 30),
+                    'Notification',
+                  )
                 ],
               ),
               automaticallyImplyLeading: false,
@@ -66,29 +66,32 @@ class _NotificationScreenState extends State<NotificationScreen> {
             body: Column(
               children: [
                 Expanded(
-                  child: StreamBuilder(
-                    stream: NotificationService.getNotificationList(),
-                    builder: (context, snapshot) {
-                      // ignore: unnecessary_cast
-                      List<Alert> notifications =
-                          (snapshot.data ?? List<Alert>.empty()) as List<Alert>;
-                      List<Widget> notificationBoxes = [];
-                      for (Alert notification in notifications) {
-                        if (account.followings.contains(notification.uid) ||
-                            notification.uid ==
-                                FirebaseAuth.instance.currentUser!.uid) {
-                          notificationBoxes.add(NotificationCard(
-                            colorPallete: colorPallete,
-                            uid: post.posterUid!,
-                            post: post,
-                          ));
-                          notificationBoxes.add(const SizedBox(height: 10));
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 14, right: 14),
+                    child: StreamBuilder(
+                      stream: NotificationService.getNotificationList(),
+                      builder: (context, snapshot) {
+                        // ignore: unnecessary_cast
+                        List<Alert> notifications = (snapshot.data ??
+                            List<Alert>.empty()) as List<Alert>;
+                        List<Widget> notificationBoxes = [];
+                        for (Alert notification in notifications) {
+                          if (account.followings.contains(notification.uid) ||
+                              notification.uid ==
+                                  FirebaseAuth.instance.currentUser!.uid) {
+                            notificationBoxes.add(NotificationCard(
+                              colorPallete: colorPallete,
+                              uid: notification.uid,
+                              notif: notification,
+                            ));
+                            notificationBoxes.add(const SizedBox(height: 10));
+                          }
                         }
-                      }
-                      return ListView(
-                        children: notificationBoxes,
-                      );
-                    },
+                        return ListView(
+                          children: notificationBoxes,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],

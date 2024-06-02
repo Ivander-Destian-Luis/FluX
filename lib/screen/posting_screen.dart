@@ -4,8 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
+import 'package:flux/models/alert.dart';
 import 'package:flux/models/posting.dart';
 import 'package:flux/services/location_service.dart';
+import 'package:flux/services/notification_service.dart';
 import 'package:flux/services/post_service.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -92,6 +94,25 @@ class _PostingScreenState extends State<PostingScreen> {
     }
   }
 
+  void _notify() async {
+    Alert notif = Alert(
+      uid: FirebaseAuth.instance.currentUser!.uid,
+      notificationId: null,
+      notificationContext: 'has posted a new Flux',
+      notifiedTime: DateTime.now(),
+      readBy: [],
+    );
+
+    int statusCode = await NotificationService.notify(
+        notif, FirebaseAuth.instance.currentUser!.uid);
+
+    if (statusCode == 200) {
+      Navigator.pushReplacementNamed(context, '/main');
+    } else {
+      print("LOL");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -120,6 +141,7 @@ class _PostingScreenState extends State<PostingScreen> {
                   GestureDetector(
                     onTap: () {
                       _posting();
+                      _notify();
                     },
                     child: Text(
                       'Post',

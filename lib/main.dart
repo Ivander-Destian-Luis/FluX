@@ -45,7 +45,7 @@ class MainApp extends StatelessWidget {
         '/input_data': (context) => const InputDataScreen(),
         '/main': (context) => const MainScreen(),
         '/launch': (context) => const LaunchAppScreen(),
-        '/settings': (context) => const SettingsScreen()
+        '/settings': (context) => const SettingsScreen(),
       },
     );
   }
