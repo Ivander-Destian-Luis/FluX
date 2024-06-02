@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flux/models/account.dart';
+import 'package:flux/models/posting.dart';
 
 class AccountService {
   static Future<Map<String, dynamic>> addUser(String username,
@@ -50,6 +51,7 @@ class AccountService {
         "followers": [],
         "profilePictureUrl": profileImageUrl ?? '',
         "posts": 0,
+        "saved": [],
       }).whenComplete(() {
         print("Submit Selesai");
       });
@@ -148,7 +150,8 @@ class AccountService {
       List<dynamic>? followings,
       List<dynamic>? followers,
       String? profilePictureUrl,
-      int? posts) async {
+      int? posts,
+      List<String>? savedPost) async {
     Account account = (await getAccountByUid(uid))!;
     try {
       await FirebaseFirestore.instance.collection('accounts').doc(uid).set({
@@ -159,6 +162,7 @@ class AccountService {
         "followers": followers ?? account.followers,
         "profilePictureUrl": profilePictureUrl ?? account.profilePictureUrl,
         "posts": posts ?? account.posts,
+        "saved": savedPost ?? account.saved,
       }).whenComplete(() {
         print("Edit Selesai");
       });
@@ -172,11 +176,12 @@ class AccountService {
     try {
       List<dynamic> userFollowings = user!.followings;
       userFollowings.add(targetUid);
-      edit(uid, null, null, null, userFollowings, null, null, null);
+      edit(uid, null, null, null, userFollowings, null, null, null, null);
 
       List<dynamic> targetFollowers = targetUser!.followers;
       targetFollowers.add(uid);
-      edit(targetUid, null, null, null, null, targetFollowers, null, null);
+      edit(
+          targetUid, null, null, null, null, targetFollowers, null, null, null);
     } catch (e) {}
   }
 
@@ -189,13 +194,22 @@ class AccountService {
       if (userFollowings.contains(targetUid)) {
         userFollowings.remove(targetUid);
       }
-      edit(uid, null, null, null, userFollowings, null, null, null);
+      edit(uid, null, null, null, userFollowings, null, null, null, null);
 
       List<dynamic> targetFollowers = targetUser!.followers;
       if (targetFollowers.contains(uid)) {
         targetFollowers.remove(uid);
       }
-      edit(targetUid, null, null, null, null, targetFollowers, null, null);
+      edit(
+          targetUid, null, null, null, null, targetFollowers, null, null, null);
     } catch (e) {}
+  }
+
+  static Future<void> savePost(String uid, Posting post) async {
+    Account? account = await getAccountByUid(uid);
+
+    account!.saved.add(post.postId!);
+
+    await edit(uid, null, null, null, null, null, null, null, account.saved);
   }
 }
