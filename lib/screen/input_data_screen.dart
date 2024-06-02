@@ -65,7 +65,7 @@ class _InputDataScreenState extends State<InputDataScreen> {
       } else {
         await AccountService.addUser(username, phoneNumber, bio, imageUrl);
       }
-        Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/main');
     }
   }
 

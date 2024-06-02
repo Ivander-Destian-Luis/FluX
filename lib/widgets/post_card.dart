@@ -59,27 +59,20 @@ class _PostBoxState extends State<PostCard> {
         _isLoading = false;
       });
     });
-    if (widget.uid != FirebaseAuth.instance.currentUser!.uid) {
-      isFollowing = await PostService.isFollowing(
-          FirebaseAuth.instance.currentUser!.uid, widget.post.posterUid!);
-    }
-    setState(() {
-      isFollowing = isFollowing;
-    });
   }
 
-  void toggleFollow() async {
-    if (isFollowing) {
-      await PostService.unfollow(
-          FirebaseAuth.instance.currentUser!.uid, widget.post.posterUid!);
-    } else {
-      await PostService.follow(
-          FirebaseAuth.instance.currentUser!.uid, widget.post.posterUid!);
-    }
-    setState(() {
-      isFollowing = !isFollowing;
-    });
-  }
+  // void toggleFollow() async {
+  //   if (isFollowing) {
+  //     await PostService.unfollow(
+  //         FirebaseAuth.instance.currentUser!.uid, widget.post.posterUid!);
+  //   } else {
+  //     await PostService.follow(
+  //         FirebaseAuth.instance.currentUser!.uid, widget.post.posterUid!);
+  //   }
+  //   setState(() {
+  //     isFollowing = !isFollowing;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -123,17 +116,17 @@ class _PostBoxState extends State<PostCard> {
                                         color: widget.colorPallete.fontColor),
                                   ),
                                   const SizedBox(width: 4),
-                                  if (widget.uid !=
-                                      FirebaseAuth.instance.currentUser!.uid)
-                                    TextButton(
-                                      onPressed: toggleFollow,
-                                      child: Text(
-                                          isFollowing ? 'Unfollow' : 'Follow'),
-                                      style: TextButton.styleFrom(
-                                        foregroundColor:
-                                            widget.colorPallete.textLinkColor,
-                                      ),
-                                    ),
+                                  // if (widget.uid !=
+                                  //     FirebaseAuth.instance.currentUser!.uid)
+                                  //   TextButton(
+                                  //     onPressed: toggleFollow,
+                                  //     child: Text(
+                                  //         isFollowing ? 'Unfollow' : 'Follow'),
+                                  //     style: TextButton.styleFrom(
+                                  //       foregroundColor:
+                                  //           widget.colorPallete.textLinkColor,
+                                  //     ),
+                                  //   ),
                                 ],
                               ),
                               Text(

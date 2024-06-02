@@ -1,7 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/screen/browse_screen.dart';
@@ -21,7 +20,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   // TODO: 1. Deklarasikan variabel
-  int _currentIndex = 1;
+  int _currentIndex = 0;
   late ColorPallete colorPallete;
   late Account account;
   late SharedPreferences prefs;

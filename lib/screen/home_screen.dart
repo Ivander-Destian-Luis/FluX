@@ -27,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ? DarkModeColorPallete()
           : LightModeColorPallete();
 
+      print("init");
+
       account = (await AccountService.getAccountByUid(
           FirebaseAuth.instance.currentUser!.uid))!;
 

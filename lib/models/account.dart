@@ -6,7 +6,7 @@ class Account {
   final int posts;
   final String profilePictureUrl;
   final String username;
-  final List<String> saved;
+  final List<dynamic> saved;
 
   Account(
       {required this.bio,
@@ -19,15 +19,17 @@ class Account {
       required this.username});
 
   factory Account.fromJson(Map<String, dynamic> data) {
-    return Account(
-      bio: data['bio'] ?? '',
-      followers: data['followers'] ?? List.empty(),
-      followings: data['followings'] ?? List.empty(),
-      phoneNumber: data['phone_number'] ?? '',
-      posts: data['posts'] ?? 0,
+    Account account = Account(
+      bio: data['bio'],
+      followers: data['followers'],
+      followings: data['followings'],
+      phoneNumber: data['phone_number'],
+      posts: data['posts'],
       profilePictureUrl: data['profilePictureUrl'] ?? '',
-      username: data['username'] ?? '',
-      saved: data['saved'] ?? List<String>.empty,
+      saved: data['saved'],
+      username: data['username'],
     );
+
+    return account;
   }
 }

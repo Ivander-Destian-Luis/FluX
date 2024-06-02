@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
@@ -81,11 +80,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 10, top: 10),
-                            child: CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(ownerAccount.profilePictureUrl),
-                              radius: 60,
-                            ),
+                            child: ownerAccount.profilePictureUrl.isNotEmpty
+                                ? CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        ownerAccount.profilePictureUrl),
+                                    radius: 60,
+                                  )
+                                : CircleAvatar(
+                                    backgroundImage: colorPallete.logo,
+                                    radius: 60,
+                                  ),
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

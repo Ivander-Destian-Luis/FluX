@@ -6,6 +6,7 @@ import 'package:flux/screen/home_screen.dart';
 import 'package:flux/screen/launch_app_screen.dart';
 import 'package:flux/screen/login_screen.dart';
 import 'package:flux/screen/profile_screen.dart';
+import 'package:flux/services/account_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -47,27 +48,13 @@ class _FollowersScreenState extends State<FollowersScreen> {
   Future<void> fetchfollowersAccounts() async {
     List<Account> accounts = [];
     for (String uid in account.followers) {
-      Account? followersAccount = await getAccountByUid(uid);
+      Account? followersAccount = await AccountService.getAccountByUid(uid);
       if (followersAccount != null) {
         accounts.add(followersAccount);
       }
     }
     setState(() {
       followersAccounts = accounts;
-    });
-  }
-
-  Future<Account?> getAccountByUid(String uid) async {
-    return await Future.delayed(const Duration(seconds: 1), () {
-      return Account(
-        bio: '',
-        followers: [],
-        phoneNumber: '',
-        posts: 0,
-        username: 'Username $uid',
-        profilePictureUrl: 'https://example.com/profileImage/$uid.png',
-        followings: [],
-      );
     });
   }
 

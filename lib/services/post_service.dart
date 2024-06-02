@@ -94,7 +94,8 @@ class PostService {
             account.followings,
             account.followers,
             account.profilePictureUrl,
-            account.posts + 1);
+            account.posts + 1,
+            account.saved);
       });
 
       print("Berhasil");

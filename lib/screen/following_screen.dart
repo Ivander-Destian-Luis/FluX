@@ -4,6 +4,7 @@ import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/screen/home_screen.dart';
 import 'package:flux/screen/profile_screen.dart';
+import 'package:flux/services/account_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FollowingScreen extends StatefulWidget {
@@ -45,27 +46,13 @@ class _FollowingScreenState extends State<FollowingScreen> {
   Future<void> fetchFollowingAccounts() async {
     List<Account> accounts = [];
     for (String uid in account.followings) {
-      Account? followingAccount = await getAccountByUid(uid);
+      Account? followingAccount = await AccountService.getAccountByUid(uid);
       if (followingAccount != null) {
         accounts.add(followingAccount);
       }
     }
     setState(() {
       followingAccounts = accounts;
-    });
-  }
-
-  Future<Account?> getAccountByUid(String uid) async {
-    return await Future.delayed(const Duration(seconds: 1), () {
-      return Account(
-        bio: '',
-        followers: [],
-        phoneNumber: '',
-        posts: 0,
-        username: 'Username $uid',
-        profilePictureUrl: 'https://example.com/profileImage/$uid.png',
-        followings: [],
-      );
     });
   }
 

@@ -96,6 +96,7 @@ class AccountService {
       final data = snapshot.data() as Map<String, dynamic>?;
       account = Account.fromJson(data!);
     } catch (e) {
+      print("Error di get account");
       return null;
     }
 
@@ -151,7 +152,7 @@ class AccountService {
       List<dynamic>? followers,
       String? profilePictureUrl,
       int? posts,
-      List<String>? savedPost) async {
+      List<dynamic>? savedPost) async {
     Account account = (await getAccountByUid(uid))!;
     try {
       await FirebaseFirestore.instance.collection('accounts').doc(uid).set({

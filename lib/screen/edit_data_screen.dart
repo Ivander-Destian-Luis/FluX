@@ -88,7 +88,8 @@ class _InputDataScreenState extends State<EditDataScreen> {
             account.followings,
             account.followers,
             _imageUrl,
-            account.posts);
+            account.posts,
+            null);
       }
       Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => const MainScreen(),
