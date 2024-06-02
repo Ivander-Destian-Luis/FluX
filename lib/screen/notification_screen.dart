@@ -76,9 +76,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             List<Alert>.empty()) as List<Alert>;
                         List<Widget> notificationBoxes = [];
                         for (Alert notification in notifications) {
-                          if (account.followings.contains(notification.uid) ||
-                              notification.uid ==
-                                  FirebaseAuth.instance.currentUser!.uid) {
+                          if (account.followings.contains(notification.uid)) {
                             notificationBoxes.add(NotificationCard(
                               colorPallete: colorPallete,
                               uid: notification.uid,

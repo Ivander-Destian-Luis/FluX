@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/services/account_service.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -30,9 +31,24 @@ class _InputDataScreenState extends State<InputDataScreen> {
 
   Future<void> _pickImage() async {
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: pickedImage!.path,
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            statusBarColor: colorPallete.fontColor,
+            activeControlsWidgetColor: colorPallete.heroColor,
+            toolbarColor: colorPallete.postBackgroundColor,
+            toolbarWidgetColor: colorPallete.fontColor,
+            initAspectRatio: CropAspectRatioPreset.square,
+            hideBottomControls: true,
+            lockAspectRatio: true),
+      ],
+    );
+
+    if (croppedFile != null) {
       setState(() {
-        _imageFile = File(pickedImage.path);
+        _imageFile = File(croppedFile.path);
       });
     }
   }
@@ -85,7 +101,7 @@ class _InputDataScreenState extends State<InputDataScreen> {
                 title: Align(
                   alignment: Alignment.topRight,
                   child: InkWell(
-                    child: Text('Save'),
+                    child: const Text('Save'),
                     onTap: () => _setData(),
                   ),
                 )),
@@ -93,7 +109,7 @@ class _InputDataScreenState extends State<InputDataScreen> {
             body: ListView(
               children: [
                 Padding(
-                    padding: EdgeInsets.only(top: 70, bottom: 40),
+                    padding: const EdgeInsets.only(top: 70, bottom: 40),
                     child: GestureDetector(
                       onTap: () {
                         _pickImage();
@@ -102,8 +118,14 @@ class _InputDataScreenState extends State<InputDataScreen> {
                           ? CircleAvatar(
                               minRadius: 70,
                               maxRadius: 70,
-                              backgroundImage: FileImage(_imageFile!),
-                            )
+                              child: ClipOval(
+                                child: Image(
+                                  image: FileImage(_imageFile!),
+                                  fit: BoxFit.fill,
+                                ),
+                              )
+                              // backgroundImage: FileImage(_imageFile!),
+                              )
                           : CircleAvatar(
                               minRadius: 70,
                               maxRadius: 70,
@@ -111,7 +133,7 @@ class _InputDataScreenState extends State<InputDataScreen> {
                             ),
                     )),
                 Padding(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 20),
                   child: Text(
                     'Username',
                     style:
@@ -119,7 +141,7 @@ class _InputDataScreenState extends State<InputDataScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 40, right: 40),
+                  padding: const EdgeInsets.only(left: 40, right: 40),
                   child: TextFormField(
                     style: TextStyle(color: colorPallete.textFieldTextColor),
                     controller: _usernameController,

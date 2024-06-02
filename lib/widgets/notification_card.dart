@@ -49,11 +49,9 @@ class _PostBoxState extends State<NotificationCard> {
       });
     }
 
-    account ??=
-        await AccountService.getAccountByUid(widget.uid).whenComplete(() {
-      setState(() {
-        _isLoading = false;
-      });
+    account ??= await AccountService.getAccountByUid(widget.uid);
+    setState(() {
+      _isLoading = false;
     });
   }
 
