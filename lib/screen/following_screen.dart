@@ -7,7 +7,8 @@ import 'package:flux/screen/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FollowingScreen extends StatefulWidget {
-  const FollowingScreen({super.key, required Account account});
+  final Account account;
+  const FollowingScreen({super.key, required this.account});
 
   @override
   State<FollowingScreen> createState() => _FollowingScreenState();
@@ -32,10 +33,40 @@ class _FollowingScreenState extends State<FollowingScreen> {
     });
   }
 
+  List<Account> followingAccounts = [];
+
   @override
   void initState() {
     super.initState();
+    account = widget.account;
     initialize();
+  }
+
+  Future<void> fetchFollowingAccounts() async {
+    List<Account> accounts = [];
+    for (String uid in account.followings) {
+      Account? followingAccount = await getAccountByUid(uid);
+      if (followingAccount != null) {
+        accounts.add(followingAccount);
+      }
+    }
+    setState(() {
+      followingAccounts = accounts;
+    });
+  }
+
+  Future<Account?> getAccountByUid(String uid) async {
+    return await Future.delayed(const Duration(seconds: 1), () {
+      return Account(
+        bio: '',
+        followers: [],
+        phoneNumber: '',
+        posts: 0,
+        username: 'Username $uid',
+        profilePictureUrl: 'https://example.com/profileImage/$uid.png',
+        followings: [],
+      );
+    });
   }
 
   @override
@@ -44,8 +75,8 @@ class _FollowingScreenState extends State<FollowingScreen> {
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
             backgroundColor: colorPallete.backgroundColor,
-            body: ListView(
-              physics: const NeverScrollableScrollPhysics(),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -62,23 +93,31 @@ class _FollowingScreenState extends State<FollowingScreen> {
                     ),
                   ],
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 30.0, right: 30.0),
-                          child: Text('Following',
-                              style: TextStyle(
-                                  fontSize: 32,
-                                  color: colorPallete.fontColor,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                  child: Text(
+                    'Followings',
+                    style: TextStyle(
+                      fontSize: 32,
+                      color: colorPallete.fontColor,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: followingAccounts.length,
+                    itemBuilder: (context, index) {
+                      final account = followingAccounts[index];
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(account.profilePictureUrl),
+                        ),
+                        title: Text(account.username),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

@@ -371,6 +371,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       PopupMenuItem(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/saved')
+                              .then((_) => setState(() {
+                                    initialize();
+                                  }));
+                        },
+                        child: Text(
+                          'Saved Post',
+                          style: TextStyle(color: colorPallete.fontColor),
+                        ),
+                      ),
+                      PopupMenuItem(
                         onTap: () async {
                           await AuthenticationService.logout().whenComplete(() {
                             Navigator.pushNamedAndRemoveUntil(

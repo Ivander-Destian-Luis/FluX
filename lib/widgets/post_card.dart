@@ -30,6 +30,7 @@ class _PostBoxState extends State<PostCard> {
   bool? _isLiked;
   bool isFollowing = false;
   bool _isLoading = true;
+  bool isBookmarked = false;
   int commentsLength = 0;
 
   @override
@@ -376,8 +377,17 @@ class _PostBoxState extends State<PostCard> {
                               color: widget.colorPallete.fontColor),
                         ),
                         GestureDetector(
-                          child: Icon(Icons.bookmark,
-                              color: widget.colorPallete.fontColor),
+                          onTap: () {
+                            setState(() {
+                              isBookmarked = !isBookmarked;
+                            });
+                          },
+                          child: Icon(
+                            isBookmarked
+                                ? Icons.bookmark
+                                : Icons.bookmark_outline,
+                            color: widget.colorPallete.fontColor,
+                          ),
                         ),
                       ],
                     ),
