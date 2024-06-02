@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/models/posting.dart';
-
+import 'package:flux/screen/followers_screen.dart';
+import 'package:flux/screen/followings_screen.dart';
 import 'package:flux/services/account_service.dart';
 import 'package:flux/services/authentication_service.dart';
 import 'package:flux/services/post_service.dart';
@@ -94,47 +95,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               Row(
                                 children: [
-                                  Column(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Text(
-                                            ownerAccount.followers.length
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: colorPallete.fontColor,
-                                                fontSize: 15)),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Text('Followers',
-                                            style: TextStyle(
-                                                color: colorPallete.fontColor,
-                                                fontSize: 15)),
-                                      )
-                                    ],
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => FollowersScreen(
+                                            account: ownerAccount,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Text(
+                                              ownerAccount.followers.length
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: colorPallete.fontColor,
+                                                  fontSize: 15)),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Text('Followers',
+                                              style: TextStyle(
+                                                  color: colorPallete.fontColor,
+                                                  fontSize: 15)),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Column(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20),
-                                        child: Text(
-                                            ownerAccount.followings.length
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: colorPallete.fontColor,
-                                                fontSize: 15)),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20),
-                                        child: Text('Followings',
-                                            style: TextStyle(
-                                                color: colorPallete.fontColor,
-                                                fontSize: 15)),
-                                      ),
-                                    ],
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => FollowingScreen(
+                                            account: ownerAccount,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 20),
+                                          child: Text(
+                                              ownerAccount.followings.length
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: colorPallete.fontColor,
+                                                  fontSize: 15)),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 20),
+                                          child: Text('Followings',
+                                              style: TextStyle(
+                                                  color: colorPallete.fontColor,
+                                                  fontSize: 15)),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   Column(
                                     children: [
@@ -341,6 +366,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                         child: Text(
                           'Settings',
+                          style: TextStyle(color: colorPallete.fontColor),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/saved')
+                              .then((_) => setState(() {
+                                    initialize();
+                                  }));
+                        },
+                        child: Text(
+                          'Saved Post',
                           style: TextStyle(color: colorPallete.fontColor),
                         ),
                       ),
