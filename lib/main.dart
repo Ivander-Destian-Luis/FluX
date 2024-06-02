@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flux/firebase_options.dart';
 import 'package:flux/screen/browse_screen.dart';
 import 'package:flux/screen/change_password_screen.dart';
 import 'package:flux/screen/forgotPassword_screen.dart';
@@ -14,14 +13,11 @@ import 'package:flux/screen/posting_screen.dart';
 import 'package:flux/screen/register_screen.dart';
 import 'package:flux/screen/saved_screen.dart';
 import 'package:flux/screen/settings_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await SharedPreferences.getInstance();
+  await Firebase.initializeApp();
+
   runApp(const MainApp());
 }
 

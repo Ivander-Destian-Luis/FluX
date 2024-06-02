@@ -20,7 +20,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  // TODO: 1. Deklarasikan variabel
   int _currentIndex = 0;
   late ColorPallete colorPallete;
   late Account account;

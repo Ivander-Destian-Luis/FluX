@@ -73,7 +73,6 @@ class AccountService {
       final storageRef = FirebaseStorage.instance.ref();
       final timestamp = DateTime.now().microsecondsSinceEpoch;
       final uploadRef = storageRef.child("profile_pictures/$userId/$timestamp");
-
       final taskSnapshot = await uploadRef.putFile(selectedImage);
 
       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
@@ -162,7 +161,9 @@ class AccountService {
       }).whenComplete(() {
         print("Edit Selesai");
       });
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   static Future<void> follow(String uid, String targetUid) async {
