@@ -52,7 +52,7 @@ class _PostBoxState extends State<UserCard> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Stack(
-              alignment: Alignment.topRight,
+              alignment: Alignment.centerRight,
               children: [
                 Column(
                   children: [
@@ -68,14 +68,17 @@ class _PostBoxState extends State<UserCard> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           account!.profilePictureUrl.isNotEmpty
-                              ? CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(account!.profilePictureUrl),
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        account!.profilePictureUrl),
+                                  ),
                                 )
-                              : const CircleAvatar(),
-                          const SizedBox(
-                            width: 10,
-                          ),
+                              : const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: CircleAvatar(),
+                                ),
                           Column(
                             children: [
                               Row(

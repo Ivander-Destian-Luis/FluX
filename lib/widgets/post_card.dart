@@ -28,7 +28,7 @@ class PostCard extends StatefulWidget {
 class _PostBoxState extends State<PostCard> {
   Account? account;
   bool? _isLiked;
-  bool isFollowing = false;
+  // bool isFollowing = false;
   bool _isLoading = true;
   bool isBookmarked = false;
   int commentsLength = 0;
@@ -53,9 +53,11 @@ class _PostBoxState extends State<PostCard> {
     setState(() {
       commentsLength = commentsLength;
     });
-    account = await AccountService.getAccountByUid(widget.uid);
-    setState(() {
-      _isLoading = false;
+    account ??=
+        await AccountService.getAccountByUid(widget.uid).whenComplete(() {
+      setState(() {
+        _isLoading = false;
+      });
     });
   }
 
@@ -98,11 +100,17 @@ class _PostBoxState extends State<PostCard> {
                       child: Row(
                         children: [
                           account!.profilePictureUrl.isNotEmpty
-                              ? CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(account!.profilePictureUrl),
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        account!.profilePictureUrl),
+                                  ),
                                 )
-                              : const CircleAvatar(),
+                              : const Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircleAvatar(),
+                                ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -113,7 +121,6 @@ class _PostBoxState extends State<PostCard> {
                                     style: TextStyle(
                                         color: widget.colorPallete.fontColor),
                                   ),
-                                  const SizedBox(width: 4),
                                   // if (widget.uid !=
                                   //     FirebaseAuth.instance.currentUser!.uid)
                                   //   TextButton(
@@ -125,14 +132,14 @@ class _PostBoxState extends State<PostCard> {
                                   //           widget.colorPallete.textLinkColor,
                                   //     ),
                                   //   ),
+                                  Text(
+                                    ' ${DateTime.now().difference(widget.post.postedTime).inDays > 0 ? '${DateTime.now().difference(widget.post.postedTime).inDays}d ' : ''}${DateTime.now().difference(widget.post.postedTime).inHours > 0 ? '${DateTime.now().difference(widget.post.postedTime).inHours % 24}h ' : ''}${DateTime.now().difference(widget.post.postedTime).inMinutes > 0 ? "${DateTime.now().difference(widget.post.postedTime).inMinutes % 60}m" : "${DateTime.now().difference(widget.post.postedTime).inSeconds % 60}s"}',
+                                    style: TextStyle(
+                                      color: widget.colorPallete.fontColor
+                                          .withOpacity(0.4),
+                                    ),
+                                  ),
                                 ],
-                              ),
-                              Text(
-                                '${DateTime.now().difference(widget.post.postedTime).inDays > 0 ? '${DateTime.now().difference(widget.post.postedTime).inDays}d ' : ''}${DateTime.now().difference(widget.post.postedTime).inHours > 0 ? '${DateTime.now().difference(widget.post.postedTime).inHours % 24}h ' : ''}${DateTime.now().difference(widget.post.postedTime).inMinutes > 0 ? "${DateTime.now().difference(widget.post.postedTime).inMinutes % 60}m" : "${DateTime.now().difference(widget.post.postedTime).inSeconds % 60}s"}',
-                                style: TextStyle(
-                                  color: widget.colorPallete.fontColor
-                                      .withOpacity(0.4),
-                                ),
                               ),
                               Text(
                                 widget.post.location ?? '',
@@ -165,138 +172,139 @@ class _PostBoxState extends State<PostCard> {
                           child: Image.network(widget.post.postingImageUrl!),
                         ),
                     ],
-                    Text.rich(TextSpan(
-                      children: [
-                        TextSpan(
-                          text: account!.username,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: widget.colorPallete.fontColor),
-                        ),
-                        const TextSpan(text: "  "),
-                        TextSpan(
-                          text: widget.post.postingDescription,
-                          style:
-                              TextStyle(color: widget.colorPallete.fontColor),
-                        ),
-                      ],
-                    )),
-                    Row(
-                      children: [
-                        Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                try {
-                                  if (_isLiked!) {
-                                    PostService.dislike(
-                                            FirebaseAuth
-                                                .instance.currentUser!.uid,
-                                            widget.post)
-                                        .whenComplete(() => initialize());
-                                  } else {
-                                    PostService.like(
-                                            FirebaseAuth
-                                                .instance.currentUser!.uid,
-                                            widget.post)
-                                        .whenComplete(() => initialize());
-                                  }
-                                } catch (e) {
-                                  print("error");
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                      child: Text.rich(TextSpan(
+                        children: [
+                          TextSpan(
+                            text: account!.username,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: widget.colorPallete.fontColor),
+                          ),
+                          const TextSpan(text: "  "),
+                          TextSpan(
+                            text: widget.post.postingDescription,
+                            style:
+                                TextStyle(color: widget.colorPallete.fontColor),
+                          ),
+                        ],
+                      )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              try {
+                                if (_isLiked!) {
+                                  PostService.dislike(
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid,
+                                          widget.post)
+                                      .whenComplete(() => initialize());
+                                } else {
+                                  PostService.like(
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid,
+                                          widget.post)
+                                      .whenComplete(() => initialize());
                                 }
-                              },
-                              child: _isLiked ?? false
-                                  ? const Icon(Icons.favorite,
-                                      color: Colors.red)
-                                  : Icon(Icons.favorite_border,
-                                      color: widget.colorPallete.fontColor),
-                            ),
-                            Text(widget.post.likes.length.toString(),
+                              } catch (e) {
+                                print("error");
+                              }
+                            },
+                            child: _isLiked ?? false
+                                ? const Icon(Icons.favorite, color: Colors.red)
+                                : Icon(Icons.favorite_border,
+                                    color: widget.colorPallete.fontColor),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 2, right: 8),
+                            child: Text(widget.post.likes.length.toString(),
                                 style: TextStyle(
                                     color: widget.colorPallete.fontColor)),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                TextEditingController commentController =
-                                    TextEditingController();
-                                showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    builder: (context) {
-                                      List<Widget> children = [];
-                                      children.add(
-                                        Container(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          decoration: BoxDecoration(
-                                            border: Border(
-                                              bottom: BorderSide(
-                                                color: widget
-                                                    .colorPallete.fontColor
-                                                    .withOpacity(0.2),
-                                              ),
-                                            ),
-                                          ),
-                                          child: CommentCard(
-                                            uid: widget.post.posterUid!,
-                                            colorPallete: widget.colorPallete,
-                                            comment:
-                                                widget.post.postingDescription,
-                                          ),
-                                        ),
-                                      );
-                                      widget.post.comments
-                                          .forEach((key, value) {
-                                        for (String comment in value) {
-                                          children.add(CommentCard(
-                                              uid: key,
-                                              colorPallete: widget.colorPallete,
-                                              comment: comment));
-                                        }
-                                      });
-                                      return Container(
-                                        padding: EdgeInsets.only(
-                                            top: 20,
-                                            bottom: MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom),
-                                        width: double.infinity,
-                                        constraints: const BoxConstraints(
-                                          maxHeight: 600,
-                                          minHeight: 300,
-                                        ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              TextEditingController commentController =
+                                  TextEditingController();
+                              showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) {
+                                    List<Widget> children = [];
+                                    children.add(
+                                      Container(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 5),
                                         decoration: BoxDecoration(
-                                          color: widget
-                                              .colorPallete.backgroundColor,
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20),
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              color: widget
+                                                  .colorPallete.fontColor
+                                                  .withOpacity(0.2),
+                                            ),
                                           ),
                                         ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Flexible(
-                                              child: Container(
-                                                constraints:
-                                                    const BoxConstraints(
-                                                  maxHeight: 400,
-                                                ),
-                                                child: SingleChildScrollView(
-                                                  child: Column(
-                                                    children: children,
-                                                  ),
+                                        child: CommentCard(
+                                          uid: widget.post.posterUid!,
+                                          colorPallete: widget.colorPallete,
+                                          comment:
+                                              widget.post.postingDescription,
+                                        ),
+                                      ),
+                                    );
+                                    widget.post.comments.forEach((key, value) {
+                                      for (String comment in value) {
+                                        children.add(CommentCard(
+                                            uid: key,
+                                            colorPallete: widget.colorPallete,
+                                            comment: comment));
+                                      }
+                                    });
+                                    return Container(
+                                      padding: EdgeInsets.only(
+                                          top: 20,
+                                          bottom: MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom),
+                                      width: double.infinity,
+                                      constraints: const BoxConstraints(
+                                        maxHeight: 600,
+                                        minHeight: 300,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            widget.colorPallete.backgroundColor,
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          topRight: Radius.circular(20),
+                                        ),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Flexible(
+                                            child: Container(
+                                              constraints: const BoxConstraints(
+                                                maxHeight: 400,
+                                              ),
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  children: children,
                                                 ),
                                               ),
                                             ),
-                                            TextField(
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(13.0),
+                                            child: TextField(
                                               controller: commentController,
                                               decoration: InputDecoration(
                                                 suffixIcon: IconButton(
@@ -350,43 +358,45 @@ class _PostBoxState extends State<PostCard> {
                                                     .colorPallete.fontColor,
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                      );
-                                    });
-                              },
-                              child: Icon(Icons.comment_rounded,
-                                  color: widget.colorPallete.fontColor),
-                            ),
-                            Text(commentsLength.toString(),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  });
+                            },
+                            child: Icon(Icons.comment_rounded,
+                                color: widget.colorPallete.fontColor),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 2, right: 4),
+                            child: Text(commentsLength.toString(),
                                 style: TextStyle(
                                     color: widget.colorPallete.fontColor)),
-                          ],
-                        ),
-                        GestureDetector(
-                          child: Icon(Icons.share,
-                              color: widget.colorPallete.fontColor),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isBookmarked = !isBookmarked;
-                            });
-                          },
-                          child: Icon(
-                            isBookmarked
-                                ? Icons.bookmark
-                                : Icons.bookmark_outline,
-                            color: widget.colorPallete.fontColor,
                           ),
-                        ),
-                      ],
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isBookmarked = !isBookmarked;
+                              });
+                            },
+                            child: Icon(
+                              isBookmarked
+                                  ? Icons.bookmark
+                                  : Icons.bookmark_outline,
+                              color: widget.colorPallete.fontColor,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                PopupMenuButton(
-                  itemBuilder: (context) => [],
-                  iconColor: widget.colorPallete.fontColor,
+                Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: PopupMenuButton(
+                    itemBuilder: (context) => [],
+                    iconColor: widget.colorPallete.fontColor,
+                  ),
                 ),
               ],
             ),

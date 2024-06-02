@@ -84,25 +84,28 @@ class _BrowseScreenState extends State<BrowseScreen> {
                 ? Column(
                     children: [
                       Expanded(
-                        child: StreamBuilder(
-                          stream: PostService.getPostingList(),
-                          builder: (context, snapshot) {
-                            // ignore: unnecessary_cast
-                            List<Posting> posts = (snapshot.data ??
-                                List<Posting>.empty()) as List<Posting>;
-                            List<Widget> postingBoxes = [];
-                            for (Posting post in posts) {
-                              postingBoxes.add(PostCard(
-                                colorPallete: colorPallete,
-                                uid: post.posterUid!,
-                                post: post,
-                              ));
-                              postingBoxes.add(const SizedBox(height: 10));
-                            }
-                            return ListView(
-                              children: postingBoxes,
-                            );
-                          },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: StreamBuilder(
+                            stream: PostService.getPostingList(),
+                            builder: (context, snapshot) {
+                              // ignore: unnecessary_cast
+                              List<Posting> posts = (snapshot.data ??
+                                  List<Posting>.empty()) as List<Posting>;
+                              List<Widget> postingBoxes = [];
+                              for (Posting post in posts) {
+                                postingBoxes.add(PostCard(
+                                  colorPallete: colorPallete,
+                                  uid: post.posterUid!,
+                                  post: post,
+                                ));
+                                postingBoxes.add(const SizedBox(height: 10));
+                              }
+                              return ListView(
+                                children: postingBoxes,
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -110,24 +113,27 @@ class _BrowseScreenState extends State<BrowseScreen> {
                 : Column(
                     children: [
                       Expanded(
-                          child: ListView.builder(
-                        itemCount: foundAcc.length,
-                        itemBuilder: (context, index) {
-                          if (foundAcc[index]
-                              .username
-                              .toLowerCase()
-                              .contains(searchResult.toLowerCase())) {
-                            return Column(children: [
-                              UserCard(
-                                colorPallete: colorPallete,
-                                account: foundAcc[index],
-                              ),
-                              const SizedBox(height: 10)
-                            ]);
-                          } else {
-                            return const SizedBox(height: 0);
-                          }
-                        },
+                          child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView.builder(
+                          itemCount: foundAcc.length,
+                          itemBuilder: (context, index) {
+                            if (foundAcc[index]
+                                .username
+                                .toLowerCase()
+                                .contains(searchResult.toLowerCase())) {
+                              return Column(children: [
+                                UserCard(
+                                  colorPallete: colorPallete,
+                                  account: foundAcc[index],
+                                ),
+                                const SizedBox(height: 10)
+                              ]);
+                            } else {
+                              return const SizedBox(height: 0);
+                            }
+                          },
+                        ),
                       )),
                     ],
                   ),

@@ -68,28 +68,31 @@ class _HomeScreenState extends State<HomeScreen> {
             body: Column(
               children: [
                 Expanded(
-                  child: StreamBuilder(
-                    stream: PostService.getPostingList(),
-                    builder: (context, snapshot) {
-                      List<Posting> posts = (snapshot.data ??
-                          List<Posting>.empty()) as List<Posting>;
-                      List<Widget> postingBoxes = [];
-                      for (Posting post in posts) {
-                        if (account.followings.contains(post.posterUid) ||
-                            post.posterUid ==
-                                FirebaseAuth.instance.currentUser!.uid) {
-                          postingBoxes.add(PostCard(
-                            colorPallete: colorPallete,
-                            uid: post.posterUid!,
-                            post: post,
-                          ));
-                          postingBoxes.add(const SizedBox(height: 10));
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: StreamBuilder(
+                      stream: PostService.getPostingList(),
+                      builder: (context, snapshot) {
+                        List<Posting> posts = (snapshot.data ??
+                            List<Posting>.empty()) as List<Posting>;
+                        List<Widget> postingBoxes = [];
+                        for (Posting post in posts) {
+                          if (account.followings.contains(post.posterUid) ||
+                              post.posterUid ==
+                                  FirebaseAuth.instance.currentUser!.uid) {
+                            postingBoxes.add(PostCard(
+                              colorPallete: colorPallete,
+                              uid: post.posterUid!,
+                              post: post,
+                            ));
+                            postingBoxes.add(const SizedBox(height: 10));
+                          }
                         }
-                      }
-                      return ListView(
-                        children: postingBoxes,
-                      );
-                    },
+                        return ListView(
+                          children: postingBoxes,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],

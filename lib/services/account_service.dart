@@ -96,7 +96,7 @@ class AccountService {
       final data = snapshot.data() as Map<String, dynamic>?;
       account = Account.fromJson(data!);
     } catch (e) {
-      print("Error di get account");
+      print("Error di get account by uid ${e}");
       return null;
     }
 
