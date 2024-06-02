@@ -1,13 +1,13 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flux/models/notification.dart';
+import 'package:flux/models/alert.dart';
 
-class PostService {
+class NotificationService {
   static final DatabaseReference _database =
       FirebaseDatabase.instance.ref().child('notification_list');
 
-  static Stream<List<Notification>> getNotificationList() {
+  static Stream<List<Alert>> getNotificationList() {
     return _database.onValue.map((event) {
-      List<Notification> items = [];
+      List<Alert> items = [];
       DataSnapshot snapshot = event.snapshot;
       try {
         if (snapshot.value != null) {
@@ -35,8 +35,8 @@ class PostService {
               notificationData['read_by'] = List<String>.empty();
             }
 
-            notificationData['post_id'] = key.toString();
-            items.add(Notification.fromJson(notificationData));
+            notificationData['notification_id'] = key.toString();
+            items.add(Alert.fromJson(notificationData));
           });
         }
       } catch (e) {
@@ -46,7 +46,7 @@ class PostService {
     });
   }
 
-  static Future<int> notify(Notification notification, String uid) async {
+  static Future<int> notify(Alert notification, String uid) async {
     int statusCode = 0;
     try {
       await _database.push().set({
@@ -67,7 +67,7 @@ class PostService {
     return statusCode;
   }
 
-  static Future<void> read(String uid, Notification notification) async {
+  static Future<void> read(String uid, Alert notification) async {
     try {
       DataSnapshot snapshot =
           await _database.child(notification.notificationId!).get();

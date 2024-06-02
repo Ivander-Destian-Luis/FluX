@@ -1,11 +1,11 @@
-class Notification {
+class Alert {
   final String uid;
   final String? notificationId;
   final DateTime notifiedTime;
   final String notificationContext;
   List<String> readBy;
 
-  Notification({
+  Alert({
     required this.uid,
     required this.notificationId,
     required this.notifiedTime,
@@ -13,9 +13,9 @@ class Notification {
     required this.readBy,
   });
 
-  factory Notification.fromJson(Map<String, dynamic> data) {
-    return Notification(
-      uid: data['uid'] ?? '',
+  factory Alert.fromJson(Map<String, dynamic> data) {
+    return Alert(
+      uid: data['uid'],
       notificationId: data['notification_id'],
       notifiedTime: DateTime.parse(data['notified_time']),
       notificationContext: data['notification_context'],

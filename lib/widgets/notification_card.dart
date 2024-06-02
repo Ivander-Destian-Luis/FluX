@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
-import 'package:flux/models/posting.dart';
+import 'package:flux/models/alert.dart';
 import 'package:flux/screen/profile_screen.dart';
 import 'package:flux/services/account_service.dart';
 import 'package:flux/services/post_service.dart';
@@ -11,16 +11,13 @@ import 'package:flux/widgets/comment_card.dart';
 class NotificationCard extends StatefulWidget {
   final ColorPallete colorPallete;
   final String uid;
-  final Posting post;
-
-  final String? postingImageUrl;
+  final Alert notif;
 
   const NotificationCard(
       {super.key,
       required this.colorPallete,
       required this.uid,
-      required this.post,
-      this.postingImageUrl});
+      required this.notif});
 
   @override
   State<NotificationCard> createState() => _PostBoxState();
@@ -28,10 +25,9 @@ class NotificationCard extends StatefulWidget {
 
 class _PostBoxState extends State<NotificationCard> {
   Account? account;
-  bool? _isLiked;
+  bool? _isRead;
 
   bool _isLoading = true;
-  int commentsLength = 0;
   @override
   void initState() {
     // TODO: implement initState
@@ -40,19 +36,16 @@ class _PostBoxState extends State<NotificationCard> {
   }
 
   void initialize() async {
-    if (widget.post.likes.contains(FirebaseAuth.instance.currentUser!.uid)) {
+    if (widget.notif.readBy.contains(FirebaseAuth.instance.currentUser!.uid)) {
       setState(() {
-        _isLiked = true;
+        _isRead = true;
       });
     } else {
       setState(() {
-        _isLiked = false;
+        _isRead = false;
       });
     }
-    commentsLength = await PostService.getCommentsLength(widget.post);
-    setState(() {
-      commentsLength = commentsLength;
-    });
+
     account ??=
         await AccountService.getAccountByUid(widget.uid).whenComplete(() {
       setState(() {
