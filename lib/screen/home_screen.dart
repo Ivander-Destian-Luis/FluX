@@ -88,6 +88,23 @@ class _HomeScreenState extends State<HomeScreen> {
                             postingBoxes.add(const SizedBox(height: 10));
                           }
                         }
+                        if (postingBoxes.isEmpty) {
+                          postingBoxes.add(const Center(
+                              child: Text(
+                            'Go Find Fren...',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          )));
+                          postingBoxes.add(const SizedBox(height: 10));
+                          postingBoxes.add(const Center(
+                              child: Text(
+                            'Navigate to the Browse Screen to Browse for other User',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )));
+                        }
                         return ListView(
                           children: postingBoxes,
                         );
