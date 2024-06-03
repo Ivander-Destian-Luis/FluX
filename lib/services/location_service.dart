@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationService {
@@ -17,7 +18,6 @@ class LocationService {
       }
     }
     if (permission == LocationPermission.deniedForever) {
-
       return false;
     }
     return true;
@@ -33,5 +33,32 @@ class LocationService {
     } catch (e) {
       return null;
     }
+  }
+
+  static void showGpsDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('GPS is Disabled'),
+          content: Text('Please enable GPS to use this feature.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Open Settings'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Geolocator.openLocationSettings();
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

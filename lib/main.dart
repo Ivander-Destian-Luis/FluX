@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/firebase_options.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:flux/screen/browse_screen.dart';
 import 'package:flux/screen/change_password_screen.dart';
 import 'package:flux/screen/forgotPassword_screen.dart';
@@ -22,6 +26,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await SharedPreferences.getInstance();
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    await FlutterConfig.loadEnvVariables();
+  }
   runApp(const MainApp());
 }
 
