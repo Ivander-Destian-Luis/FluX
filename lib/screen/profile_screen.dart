@@ -403,6 +403,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   PopupMenuButton(
                     iconColor: colorPallete.fontColor,
+                    offset: const Offset(-10, 50),
                     color: colorPallete.postBackgroundColor,
                     itemBuilder: (context) => [
                       PopupMenuItem(
