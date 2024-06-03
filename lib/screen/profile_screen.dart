@@ -480,42 +480,86 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     offset: const Offset(-10, 50),
                     color: colorPallete.postBackgroundColor,
                     itemBuilder: (context) => [
-                      PopupMenuItem(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/settings')
-                              .then((_) => setState(() {
-                                    initialize();
-                                  }));
-                        },
-                        child: Text(
-                          'Settings',
-                          style: TextStyle(color: colorPallete.fontColor),
+                      if (_accountUid == _targetUid) ...[
+                        PopupMenuItem(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/settings')
+                                .then((_) => setState(() {
+                                      initialize();
+                                    }));
+                          },
+                          child: Text(
+                            'Settings',
+                            style: TextStyle(color: colorPallete.fontColor),
+                          ),
                         ),
-                      ),
-                      PopupMenuItem(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/saved')
-                              .then((_) => setState(() {
-                                    initialize();
-                                  }));
-                        },
-                        child: Text(
-                          'Saved Post',
-                          style: TextStyle(color: colorPallete.fontColor),
+                        PopupMenuItem(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/saved')
+                                .then((_) => setState(() {
+                                      initialize();
+                                    }));
+                          },
+                          child: Text(
+                            'Saved Post',
+                            style: TextStyle(color: colorPallete.fontColor),
+                          ),
                         ),
-                      ),
-                      PopupMenuItem(
-                        onTap: () async {
-                          await AuthenticationService.logout().whenComplete(() {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, '/login', (route) => false);
-                          });
-                        },
-                        child: Text(
-                          'Logout',
-                          style: TextStyle(color: colorPallete.fontColor),
+                        PopupMenuItem(
+                          onTap: () async {
+                            await AuthenticationService.logout()
+                                .whenComplete(() {
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, '/login', (route) => false);
+                            });
+                          },
+                          child: Text(
+                            'Logout',
+                            style: TextStyle(color: colorPallete.fontColor),
+                          ),
                         ),
-                      ),
+                      ],
+                      if (_accountUid != _targetUid) ...[
+                        PopupMenuItem(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  backgroundColor: colorPallete.backgroundColor,
+                                  title: Text(
+                                    'Account has been reported.',
+                                    style: TextStyle(
+                                        color: colorPallete.fontColor),
+                                  ),
+                                  content: Text(
+                                    'You reported this account!',
+                                    style: TextStyle(
+                                        color: colorPallete.fontColor),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: Text(
+                                        'OK',
+                                        style: TextStyle(
+                                            color: colorPallete.fontColor,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Text(
+                            'Report',
+                            style: TextStyle(color: colorPallete.fontColor),
+                          ),
+                        ),
+                      ]
                     ],
                   ),
                 ],

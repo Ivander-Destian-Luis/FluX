@@ -7,7 +7,6 @@ import 'package:flux/firebase_options.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flux/screen/browse_screen.dart';
 import 'package:flux/screen/change_password_screen.dart';
-import 'package:flux/screen/forgotPassword_screen.dart';
 import 'package:flux/screen/home_screen.dart';
 import 'package:flux/screen/input_data_screen.dart';
 import 'package:flux/screen/launch_app_screen.dart';
@@ -44,7 +43,6 @@ class MainApp extends StatelessWidget {
           ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.black)),
       routes: {
         '/browse': (context) => const BrowseScreen(),
-        '/forgotPassword': (context) => const ForgotPassword(),
         '/home': (context) => const HomeScreen(),
         'changePassword': (context) => const ChangePasswordScreen(),
         '/login': (context) => const LoginScreen(),
