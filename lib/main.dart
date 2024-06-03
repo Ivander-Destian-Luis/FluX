@@ -53,7 +53,7 @@ class MainApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
         '/saved': (context) => const SavedScreen(),
         '/input_data': (context) => const InputDataScreen(),
-        // '/main': (context) => const MainScreen(index: 0),
+        '/main': (context) => const MainScreen(index: 0),
         '/launch': (context) => const LaunchAppScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/verification': (context) => const VerificationScreen(),
