@@ -116,7 +116,11 @@ class _FollowersScreenState extends State<FollowersScreen> {
                               ),
                               title: GestureDetector(
                                 onTap: () => navigateToProfile(account),
-                                child: Text(account.username),
+                                child: Text(
+                                  account.username,
+                                  style:
+                                      TextStyle(color: colorPallete.fontColor),
+                                ),
                               ),
                             );
                           },

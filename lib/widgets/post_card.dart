@@ -6,6 +6,7 @@ import 'package:flux/models/alert.dart';
 import 'package:flux/models/posting.dart';
 import 'package:flux/screen/google_maps_screen.dart';
 import 'package:flux/screen/main_screen.dart';
+import 'package:flux/screen/profile_screen.dart';
 import 'package:flux/services/account_service.dart';
 import 'package:flux/services/notification_service.dart';
 import 'package:flux/services/post_service.dart';
@@ -112,8 +113,8 @@ class _PostCardState extends State<PostCard> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      const MainScreen(index: 4)));
+                                  builder: (context) => ProfileScreen(
+                                      account: account!, selectPosted: true)));
                         }
                       },
                       child: Row(

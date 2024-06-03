@@ -262,6 +262,7 @@ class _PostingScreenState extends State<PostingScreen> {
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                       ),
+                      style: TextStyle(color: colorPallete.fontColor),
                     ),
                   ),
                 ],

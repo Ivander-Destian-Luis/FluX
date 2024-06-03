@@ -326,14 +326,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           GestureDetector(
                             onTap: () {
                               if (!widget.selectPosted) {
-                                Navigator.pushReplacement(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder: (context, animation,
-                                              secondaryAnimation) =>
-                                          MainScreen(index: 4),
-                                      transitionDuration: Duration.zero,
-                                    ));
+                                if (_accountUid == _targetUid) {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            MainScreen(index: 4),
+                                        transitionDuration: Duration.zero,
+                                      ));
+                                } else {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            ProfileScreen(
+                                                account: ownerAccount,
+                                                selectPosted: true),
+                                        transitionDuration: Duration.zero,
+                                      ));
+                                }
                               }
                             },
                             child: Padding(
@@ -353,14 +366,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           GestureDetector(
                             onTap: () {
                               if (widget.selectPosted) {
-                                Navigator.pushReplacement(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder: (context, animation,
-                                              secondaryAnimation) =>
-                                          MainScreen(index: 5),
-                                      transitionDuration: Duration.zero,
-                                    ));
+                                if (_accountUid == _targetUid) {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            MainScreen(index: 5),
+                                        transitionDuration: Duration.zero,
+                                      ));
+                                } else {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            ProfileScreen(
+                                                account: ownerAccount,
+                                                selectPosted: false),
+                                        transitionDuration: Duration.zero,
+                                      ));
+                                }
                               }
                             },
                             child: Padding(
