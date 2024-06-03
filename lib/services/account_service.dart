@@ -209,7 +209,16 @@ class AccountService {
   static Future<void> savePost(String uid, Posting post) async {
     Account? account = await getAccountByUid(uid);
 
-    account!.saved.add(post.postId!);
+    if (!account!.saved.contains(post.postId!)) {
+      account.saved.add(post.postId!);
+      await edit(uid, null, null, null, null, null, null, null, account.saved);
+    }
+  }
+
+  static Future<void> removePost(String uid, Posting post) async {
+    Account? account = await getAccountByUid(uid);
+
+    account!.saved.remove(post.postId!);
 
     await edit(uid, null, null, null, null, null, null, null, account.saved);
   }

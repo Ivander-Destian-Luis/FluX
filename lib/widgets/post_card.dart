@@ -6,7 +6,6 @@ import 'package:flux/models/alert.dart';
 import 'package:flux/models/posting.dart';
 import 'package:flux/screen/google_maps_screen.dart';
 import 'package:flux/screen/main_screen.dart';
-import 'package:flux/screen/profile_screen.dart';
 import 'package:flux/services/account_service.dart';
 import 'package:flux/services/notification_service.dart';
 import 'package:flux/services/post_service.dart';
@@ -28,10 +27,10 @@ class PostCard extends StatefulWidget {
       this.postingImageUrl});
 
   @override
-  State<PostCard> createState() => _PostBoxState();
+  State<PostCard> createState() => _PostCardState();
 }
 
-class _PostBoxState extends State<PostCard> {
+class _PostCardState extends State<PostCard> {
   Account? account;
   bool? _isLiked;
   // bool isFollowing = false;
@@ -56,6 +55,19 @@ class _PostBoxState extends State<PostCard> {
       });
     }
 
+    if ((await AccountService.getAccountByUid(
+            FirebaseAuth.instance.currentUser!.uid))!
+        .saved
+        .contains(widget.post.postId!)) {
+      setState(() {
+        isBookmarked = true;
+      });
+    } else {
+      setState(() {
+        isBookmarked = false;
+      });
+    }
+
     commentsLength = await PostService.getCommentsLength(widget.post);
     setState(() {
       commentsLength = commentsLength;
@@ -64,8 +76,6 @@ class _PostBoxState extends State<PostCard> {
     setState(() {
       _isLoading = false;
     });
-
-    print(account!.username);
   }
 
   void _notify(String notificationContext) async {
@@ -80,19 +90,6 @@ class _PostBoxState extends State<PostCard> {
     int statusCode = await NotificationService.notify(
         notif, FirebaseAuth.instance.currentUser!.uid);
   }
-
-  // void toggleFollow() async {
-  //   if (isFollowing) {
-  //     await PostService.unfollow(
-  //         FirebaseAuth.instance.currentUser!.uid, widget.post.posterUid!);
-  //   } else {
-  //     await PostService.follow(
-  //         FirebaseAuth.instance.currentUser!.uid, widget.post.posterUid!);
-  //   }
-  //   setState(() {
-  //     isFollowing = !isFollowing;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -181,8 +178,7 @@ class _PostBoxState extends State<PostCard> {
                                           children: [
                                             TextSpan(
                                               text:
-                                                  '${widget.post.location} ' ??
-                                                      '',
+                                                  '${widget.post.location ?? ''} ',
                                             ),
                                             WidgetSpan(
                                               child: Icon(
@@ -247,16 +243,16 @@ class _PostBoxState extends State<PostCard> {
                       child: Row(
                         children: [
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async {
                               try {
                                 if (_isLiked!) {
-                                  PostService.dislike(
+                                  await PostService.dislike(
                                           FirebaseAuth
                                               .instance.currentUser!.uid,
                                           widget.post)
                                       .whenComplete(() => initialize());
                                 } else {
-                                  PostService.like(
+                                  await PostService.like(
                                           FirebaseAuth
                                               .instance.currentUser!.uid,
                                           widget.post)
@@ -435,17 +431,32 @@ class _PostBoxState extends State<PostCard> {
                                     color: widget.colorPallete.fontColor)),
                           ),
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async {
                               setState(() {
                                 isBookmarked = !isBookmarked;
                               });
+
+                              try {
+                                if (isBookmarked) {
+                                  await AccountService.savePost(
+                                    FirebaseAuth.instance.currentUser!.uid,
+                                    widget.post,
+                                  );
+                                } else {
+                                  await AccountService.removePost(
+                                    FirebaseAuth.instance.currentUser!.uid,
+                                    widget.post,
+                                  );
+                                }
+                              } catch (e) {
+                                print("Error: $e");
+                              }
                             },
                             child: Icon(
                               isBookmarked
                                   ? Icons.bookmark
                                   : Icons.bookmark_outline,
                               color: widget.colorPallete.fontColor,
-                              size: 30,
                             ),
                           ),
                         ],
