@@ -199,25 +199,29 @@ class _PostCardState extends State<PostCard> {
                     ),
                     if (widget.post.postingImageUrl != null) ...[
                       if (widget.post.postingImageUrl!.isNotEmpty)
-                        GestureDetector(
-                          onDoubleTap: () {
-                            try {
-                              if (!_isLiked! &&
-                                  widget.post.posterUid !=
-                                      FirebaseAuth.instance.currentUser!.uid) {
-                                PostService.like(
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                        widget.post)
-                                    .whenComplete(() {
-                                  initialize();
-                                  _notify('has liked your post');
-                                });
+                        Center(
+                          child: GestureDetector(
+                            onDoubleTap: () {
+                              try {
+                                if (!_isLiked! &&
+                                    widget.post.posterUid !=
+                                        FirebaseAuth
+                                            .instance.currentUser!.uid) {
+                                  PostService.like(
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid,
+                                          widget.post)
+                                      .whenComplete(() {
+                                    initialize();
+                                    _notify('has liked your post');
+                                  });
+                                }
+                              } catch (e) {
+                                print("error");
                               }
-                            } catch (e) {
-                              print("error");
-                            }
-                          },
-                          child: Image.network(widget.post.postingImageUrl!),
+                            },
+                            child: Image.network(widget.post.postingImageUrl!),
+                          ),
                         ),
                     ],
                     Padding(
