@@ -27,7 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ? DarkModeColorPallete()
           : LightModeColorPallete();
 
-      account = (await AccountService.getAccountByUid(FirebaseAuth.instance.currentUser!.uid))!;
+      print("init");
+
+      account = (await AccountService.getAccountByUid(
+          FirebaseAuth.instance.currentUser!.uid))!;
 
       setState(() {
         _isLoading = false;
@@ -51,29 +54,32 @@ class _HomeScreenState extends State<HomeScreen> {
             appBar: AppBar(
               backgroundColor: colorPallete.backgroundColor,
               title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
                   Image(
-                  image: colorPallete.logo,
-                  fit: BoxFit.contain,
-                  height: 48,
+                    image: colorPallete.logo,
+                    fit: BoxFit.contain,
+                    height: 48,
                   ),
                 ],
               ),
               automaticallyImplyLeading: false,
             ),
             body: Column(
-                children: [
-                  Expanded(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: StreamBuilder(
                       stream: PostService.getPostingList(),
                       builder: (context, snapshot) {
-                        // ignore: unnecessary_cast
                         List<Posting> posts = (snapshot.data ??
                             List<Posting>.empty()) as List<Posting>;
                         List<Widget> postingBoxes = [];
                         for (Posting post in posts) {
-                          if (account.followings.contains(post.posterUid) || post.posterUid == FirebaseAuth.instance.currentUser!.uid) {
+                          if (account.followings.contains(post.posterUid) ||
+                              post.posterUid ==
+                                  FirebaseAuth.instance.currentUser!.uid) {
                             postingBoxes.add(PostCard(
                               colorPallete: colorPallete,
                               uid: post.posterUid!,
@@ -82,14 +88,32 @@ class _HomeScreenState extends State<HomeScreen> {
                             postingBoxes.add(const SizedBox(height: 10));
                           }
                         }
+                        if (postingBoxes.isEmpty) {
+                          postingBoxes.add(const Center(
+                              child: Text(
+                            'Go Find Fren...',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          )));
+                          postingBoxes.add(const SizedBox(height: 10));
+                          postingBoxes.add(const Center(
+                              child: Text(
+                            'Navigate to the Browse Screen to Browse for other User',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )));
+                        }
                         return ListView(
                           children: postingBoxes,
                         );
                       },
                     ),
                   ),
-                ],
-              )
+                ),
+              ],
+            ),
           );
   }
 }

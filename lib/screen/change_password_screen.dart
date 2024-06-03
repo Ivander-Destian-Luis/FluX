@@ -99,11 +99,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               physics: const NeverScrollableScrollPhysics(),
               children: [
                 IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back),
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()),
                     );
                   },
                 ),
@@ -114,7 +115,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                               top: 150, left: 30.0, right: 30.0, bottom: 10),
                           child: Text('Previous Password',
                               style: TextStyle(
@@ -140,7 +141,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                               top: 30.0, left: 30.0, right: 30.0, bottom: 10),
                           child: Text('New Password',
                               style: TextStyle(
@@ -166,7 +167,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                               left: 30.0, right: 30.0, top: 20, bottom: 10),
                           child: Text('Confirm Password',
                               style: TextStyle(

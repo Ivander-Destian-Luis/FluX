@@ -78,8 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
+                  const Padding(
+                    padding: EdgeInsets.only(
                         top: 200, left: 30.0, right: 30.0, bottom: 10),
                   ),
                   Padding(
@@ -95,8 +95,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 30),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 30),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -112,9 +112,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           fillColor: colorPallete.backgroundColor),
                     ),
                   ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 30.0, right: 30.0, top: 10),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 30.0, right: 30.0, top: 10),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -130,21 +129,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20)),
                         fillColor: colorPallete.backgroundColor,
-                        // suffixIcon: IconButton(
-                        //   onPressed: () {
-                        //     setState(() {
-                        //       _obscurePassword = !_obscurePassword;
-                        //     });
-                        //   },
-                        //   icon: Icon(_obscurePassword
-                        //       ? Icons.visibility_off
-                        //       : Icons.visibility),
-                        // ),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                          icon: Icon(_obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                        ),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30, bottom: 10),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 30, bottom: 10),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -181,8 +180,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 10),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

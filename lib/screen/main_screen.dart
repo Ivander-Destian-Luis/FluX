@@ -1,7 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/screen/browse_screen.dart';
@@ -55,6 +54,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+
     initialize();
   }
 

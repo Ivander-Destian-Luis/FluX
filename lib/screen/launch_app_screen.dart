@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
+import 'package:flux/models/account.dart';
+import 'package:flux/screen/profile_screen.dart';
+import 'package:flux/services/account_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LaunchAppScreen extends StatefulWidget {
@@ -15,22 +18,23 @@ class _LaunchAppScreenState extends State<LaunchAppScreen> {
 
   bool _isLoading = true;
 
-  @override
-  void initState() {
-    super.initState();
-    initialize();
-  }
-
   void initialize() async {
     prefs = await SharedPreferences.getInstance().then((value) {
       colorPallete = value.getBool('isDarkMode') ?? false
           ? DarkModeColorPallete()
           : LightModeColorPallete();
+
       setState(() {
         _isLoading = false;
       });
       return value;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initialize();
   }
 
   @override

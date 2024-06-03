@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flux/models/account.dart';
 import 'package:flux/models/posting.dart';
+import 'package:flux/services/account_service.dart';
 
 class PostService {
   static final DatabaseReference _database =
@@ -81,6 +83,19 @@ class PostService {
         'longitude': posting.longitude,
         'comments': posting.comments,
         'postedTime': DateTime.now().toString(),
+      }).whenComplete(() async {
+        Account account = (await AccountService.getAccountByUid(
+            FirebaseAuth.instance.currentUser!.uid))!;
+        AccountService.edit(
+            FirebaseAuth.instance.currentUser!.uid,
+            account.username,
+            account.phoneNumber,
+            account.bio,
+            account.followings,
+            account.followers,
+            account.profilePictureUrl,
+            account.posts + 1,
+            account.saved);
       });
 
       print("Berhasil");
@@ -224,5 +239,74 @@ class PostService {
     } catch (e) {}
 
     return length;
+  }
+
+  static Future<List<Posting>> getSavedPost(String uid) async {
+    Account? account = await AccountService.getAccountByUid(uid);
+    List<Posting> savedPosts = List<Posting>.empty(growable: true);
+    _database.onValue.map((event) {
+      List<Posting> items = [];
+      DataSnapshot snapshot = event.snapshot;
+      try {
+        if (snapshot.value != null) {
+          Map<Object?, Object?> listData =
+              snapshot.value as Map<Object?, Object?>;
+          listData.forEach((key, value) {
+            final data = value as Map<Object?, Object?>;
+            Map<String, dynamic> accountData = {};
+            bool likesExisted = false;
+            bool commentsExisted = false;
+            data.forEach((key, value) {
+              if (key.toString() == 'likes') {
+                likesExisted = true;
+                final dataLikes = value as List<Object?>;
+                List<String> likes = [];
+                for (var like in dataLikes) {
+                  likes.add(like.toString());
+                }
+                accountData[key.toString()] = likes;
+              } else if (key.toString() == 'comments') {
+                commentsExisted = true;
+                final dataComments = value as Map<Object?, Object?>;
+                Map<String, List<String>> comments = {};
+                dataComments.forEach((key, value) {
+                  final temp = value as List<Object?>;
+                  List<String> listComments = [];
+                  for (var comment in temp) {
+                    listComments.add(comment.toString());
+                  }
+                  comments[key.toString()] = listComments;
+                });
+                accountData[key.toString()] = comments;
+              } else {
+                accountData[key.toString()] = value;
+              }
+            });
+
+            if (!likesExisted) {
+              accountData['likes'] = List<String>.empty();
+            }
+
+            if (!commentsExisted) {
+              accountData['comments'] = Map<String, List<dynamic>>.from({});
+            }
+
+            accountData['post_id'] = key.toString();
+            items.add(Posting.fromJson(accountData));
+          });
+        }
+      } catch (e) {
+        print(e);
+      }
+      savedPosts = items;
+    });
+
+    for (var post in savedPosts) {
+      if (!account!.saved.contains(post.postId)) {
+        savedPosts.remove(post);
+      }
+    }
+
+    return savedPosts;
   }
 }

@@ -63,7 +63,7 @@ class _FollowersScreenState extends State<FollowersScreen> {
       ),
     );
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return _isLoading
