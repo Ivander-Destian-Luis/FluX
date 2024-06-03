@@ -87,20 +87,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           }
                         }
                         if (postingBoxes.isEmpty) {
-                          postingBoxes.add(const Center(
+                          postingBoxes.add(Center(
                               child: Text(
                             'Go Find Fren...',
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: colorPallete.fontColor),
                           )));
                           postingBoxes.add(const SizedBox(height: 10));
-                          postingBoxes.add(const Center(
+                          postingBoxes.add(Center(
                               child: Text(
                             'Navigate to the Browse Screen to Browse for other User',
                             style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: colorPallete.fontColor),
                           )));
                         }
                         return ListView(

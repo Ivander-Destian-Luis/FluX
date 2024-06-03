@@ -131,6 +131,7 @@ class _PostingScreenState extends State<PostingScreen> {
         : Scaffold(
             backgroundColor: colorPallete.backgroundColor,
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               backgroundColor: colorPallete.backgroundColor,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

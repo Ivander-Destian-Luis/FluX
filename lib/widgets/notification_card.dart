@@ -88,7 +88,12 @@ class _PostBoxState extends State<NotificationCard> {
                                         account!.profilePictureUrl),
                                   ),
                                 )
-                              : const CircleAvatar(),
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircleAvatar(
+                                    backgroundImage: widget.colorPallete.logo,
+                                  ),
+                                ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

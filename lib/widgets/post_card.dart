@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
+import 'package:flux/models/alert.dart';
 import 'package:flux/models/posting.dart';
 import 'package:flux/screen/google_maps_screen.dart';
 import 'package:flux/screen/profile_screen.dart';
 import 'package:flux/services/account_service.dart';
+import 'package:flux/services/notification_service.dart';
 import 'package:flux/services/post_service.dart';
 import 'package:flux/widgets/comment_card.dart';
 
@@ -62,6 +64,19 @@ class _PostBoxState extends State<PostCard> {
     });
   }
 
+  void _notify(String notificationContext) async {
+    Alert notif = Alert(
+      uid: FirebaseAuth.instance.currentUser!.uid,
+      notificationId: null,
+      notificationContext: notificationContext,
+      notifiedTime: DateTime.now(),
+      readBy: [],
+    );
+
+    int statusCode = await NotificationService.notify(
+        notif, FirebaseAuth.instance.currentUser!.uid);
+  }
+
   // void toggleFollow() async {
   //   if (isFollowing) {
   //     await PostService.unfollow(
@@ -104,6 +119,7 @@ class _PostBoxState extends State<PostCard> {
                               ? Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: CircleAvatar(
+                                    minRadius: 20,
                                     backgroundImage: NetworkImage(
                                         account!.profilePictureUrl),
                                   ),
@@ -124,10 +140,11 @@ class _PostBoxState extends State<PostCard> {
                                   Text(
                                     account!.username,
                                     style: TextStyle(
+                                        fontSize: 16,
                                         color: widget.colorPallete.fontColor),
                                   ),
                                   Text(
-                                    ' ${DateTime.now().difference(widget.post.postedTime).inDays > 0 ? '${DateTime.now().difference(widget.post.postedTime).inDays}d ' : ''}${DateTime.now().difference(widget.post.postedTime).inHours > 0 ? '${DateTime.now().difference(widget.post.postedTime).inHours % 24}h ' : ''}${DateTime.now().difference(widget.post.postedTime).inMinutes > 0 ? "${DateTime.now().difference(widget.post.postedTime).inMinutes % 60}m" : "${DateTime.now().difference(widget.post.postedTime).inSeconds % 60}s"}',
+                                    '  ${DateTime.now().difference(widget.post.postedTime).inDays > 0 ? '${DateTime.now().difference(widget.post.postedTime).inDays}d ' : ''}${DateTime.now().difference(widget.post.postedTime).inHours > 0 ? '${DateTime.now().difference(widget.post.postedTime).inHours % 24}h ' : ''}${DateTime.now().difference(widget.post.postedTime).inMinutes > 0 ? "${DateTime.now().difference(widget.post.postedTime).inMinutes % 60}m" : "${DateTime.now().difference(widget.post.postedTime).inSeconds % 60}s"}',
                                     style: TextStyle(
                                       color: widget.colorPallete.fontColor
                                           .withOpacity(0.4),
@@ -149,12 +166,27 @@ class _PostBoxState extends State<PostCard> {
                                                         widget.post.longitude!),
                                           ));
                                     },
-                                    child: Text(
-                                      widget.post.location ?? '',
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          color: widget
-                                              .colorPallete.textLinkColor),
+                                    child: Text.rich(
+                                      TextSpan(
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              color: widget
+                                                  .colorPallete.textLinkColor),
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  '${widget.post.location} ' ??
+                                                      '',
+                                            ),
+                                            WidgetSpan(
+                                              child: Icon(
+                                                Icons.pin_drop,
+                                                color: widget
+                                                    .colorPallete.fontColor,
+                                                size: 16,
+                                              ),
+                                            )
+                                          ]),
                                     )),
                               ],
                             ],
@@ -173,7 +205,10 @@ class _PostBoxState extends State<PostCard> {
                                 PostService.like(
                                         FirebaseAuth.instance.currentUser!.uid,
                                         widget.post)
-                                    .whenComplete(() => initialize());
+                                    .whenComplete(() {
+                                  initialize();
+                                  _notify('has liked your post');
+                                });
                               }
                             } catch (e) {
                               print("error");
@@ -219,16 +254,21 @@ class _PostBoxState extends State<PostCard> {
                                           FirebaseAuth
                                               .instance.currentUser!.uid,
                                           widget.post)
-                                      .whenComplete(() => initialize());
+                                      .whenComplete(() {
+                                    initialize();
+                                    _notify('has liked your post');
+                                  });
                                 }
                               } catch (e) {
                                 print("error");
                               }
                             },
                             child: _isLiked ?? false
-                                ? const Icon(Icons.favorite, color: Colors.red)
+                                ? const Icon(Icons.favorite,
+                                    color: Colors.red, size: 30)
                                 : Icon(Icons.favorite_border,
-                                    color: widget.colorPallete.fontColor),
+                                    color: widget.colorPallete.fontColor,
+                                    size: 30),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 2, right: 8),
@@ -359,6 +399,8 @@ class _PostBoxState extends State<PostCard> {
                                                           widget.post)
                                                       .whenComplete(() {
                                                     initialize();
+                                                    _notify(
+                                                        'has commented on your post');
                                                     Navigator.of(context).pop();
                                                   });
                                                 }
@@ -374,11 +416,14 @@ class _PostBoxState extends State<PostCard> {
                                     );
                                   });
                             },
-                            child: Icon(Icons.comment_rounded,
-                                color: widget.colorPallete.fontColor),
+                            child: Icon(
+                              Icons.comment_rounded,
+                              color: widget.colorPallete.fontColor,
+                              size: 30,
+                            ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 2, right: 4),
+                            padding: const EdgeInsets.only(left: 3, right: 6),
                             child: Text(commentsLength.toString(),
                                 style: TextStyle(
                                     color: widget.colorPallete.fontColor)),
@@ -394,6 +439,7 @@ class _PostBoxState extends State<PostCard> {
                                   ? Icons.bookmark
                                   : Icons.bookmark_outline,
                               color: widget.colorPallete.fontColor,
+                              size: 30,
                             ),
                           ),
                         ],

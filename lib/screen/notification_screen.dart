@@ -76,7 +76,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             List<Alert>.empty()) as List<Alert>;
                         List<Widget> notificationBoxes = [];
                         for (Alert notification in notifications) {
-                          if (account.followings.contains(notification.uid)) {
+                          if (account.followings.contains(notification.uid) ||
+                              account.followers.contains(notification.uid)) {
                             notificationBoxes.add(NotificationCard(
                               colorPallete: colorPallete,
                               uid: notification.uid,

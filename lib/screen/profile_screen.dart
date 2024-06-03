@@ -2,12 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
+import 'package:flux/models/alert.dart';
 import 'package:flux/models/posting.dart';
 import 'package:flux/screen/edit_data_screen.dart';
 import 'package:flux/screen/followers_screen.dart';
 import 'package:flux/screen/followings_screen.dart';
 import 'package:flux/services/account_service.dart';
 import 'package:flux/services/authentication_service.dart';
+import 'package:flux/services/notification_service.dart';
 import 'package:flux/services/post_service.dart';
 import 'package:flux/widgets/post_card.dart';
 
@@ -39,6 +41,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     ownerAccount = widget.account;
     initialize();
+  }
+
+  void _notify() async {
+    Alert notif = Alert(
+      uid: FirebaseAuth.instance.currentUser!.uid,
+      notificationId: null,
+      notificationContext: 'has started following you',
+      notifiedTime: DateTime.now(),
+      readBy: [],
+    );
+
+    int statusCode = await NotificationService.notify(
+        notif, FirebaseAuth.instance.currentUser!.uid);
   }
 
   void initialize() async {
@@ -119,7 +134,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: Column(
                                       children: [
                                         Padding(
-                                          padding: EdgeInsets.only(left: 10),
+                                          padding:
+                                              const EdgeInsets.only(left: 10),
                                           child: Text(
                                               ownerAccount.followers.length
                                                   .toString(),
@@ -129,7 +145,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   fontSize: 15)),
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.only(left: 10),
+                                          padding:
+                                              const EdgeInsets.only(left: 10),
                                           child: Text('Followers',
                                               style: TextStyle(
                                                   color: colorPallete.fontColor,
@@ -153,7 +170,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: Column(
                                       children: [
                                         Padding(
-                                          padding: EdgeInsets.only(left: 20),
+                                          padding:
+                                              const EdgeInsets.only(left: 20),
                                           child: Text(
                                               ownerAccount.followings.length
                                                   .toString(),
@@ -163,7 +181,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   fontSize: 15)),
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.only(left: 20),
+                                          padding:
+                                              const EdgeInsets.only(left: 20),
                                           child: Text('Followings',
                                               style: TextStyle(
                                                   color: colorPallete.fontColor,
@@ -276,6 +295,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   .whenComplete(
                                 () {
                                   initialize();
+                                  _notify();
                                 },
                               );
                             },

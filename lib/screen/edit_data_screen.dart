@@ -7,6 +7,7 @@ import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/screen/main_screen.dart';
 import 'package:flux/services/account_service.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -27,7 +28,7 @@ class EditDataScreen extends StatefulWidget {
 }
 
 class _InputDataScreenState extends State<EditDataScreen> {
-  TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
 
@@ -42,9 +43,23 @@ class _InputDataScreenState extends State<EditDataScreen> {
 
   Future<void> _pickImage() async {
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: pickedImage!.path,
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            statusBarColor: colorPallete.fontColor,
+            activeControlsWidgetColor: colorPallete.heroColor,
+            toolbarColor: colorPallete.postBackgroundColor,
+            toolbarWidgetColor: colorPallete.fontColor,
+            initAspectRatio: CropAspectRatioPreset.square,
+            hideBottomControls: true,
+            lockAspectRatio: true),
+      ],
+    );
+    if (croppedFile != null) {
       setState(() {
-        _imageFile = File(pickedImage.path);
+        _imageFile = File(croppedFile.path);
         _imageUrl = '';
       });
     }
@@ -109,12 +124,16 @@ class _InputDataScreenState extends State<EditDataScreen> {
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
             appBar: AppBar(
+                automaticallyImplyLeading: false,
                 backgroundColor: colorPallete.backgroundColor,
                 title: Align(
                   alignment: Alignment.topRight,
                   child: InkWell(
-                    child: const Text('Save'),
                     onTap: () => _setData(),
+                    child: Text(
+                      'Save',
+                      style: TextStyle(color: colorPallete.fontColor),
+                    ),
                   ),
                 )),
             backgroundColor: colorPallete.backgroundColor,
@@ -123,27 +142,39 @@ class _InputDataScreenState extends State<EditDataScreen> {
                 Padding(
                     padding: const EdgeInsets.only(top: 70, bottom: 40),
                     child: GestureDetector(
-                        onTap: () {
-                          _pickImage();
-                        },
-                        child: _imageFile != null
-                            ? CircleAvatar(
-                                minRadius: 70,
-                                maxRadius: 70,
-                                backgroundImage: FileImage(_imageFile!),
-                              )
-                            : _imageFile != null
-                                ? CircleAvatar(
-                                    minRadius: 70,
-                                    maxRadius: 70,
-                                    backgroundImage:
-                                        AssetImage('${colorPallete.logo}'),
-                                  )
-                                : CircleAvatar(
-                                    minRadius: 70,
-                                    maxRadius: 70,
-                                    backgroundImage: NetworkImage(_imageUrl!),
-                                  ))),
+                      onTap: () {
+                        _pickImage();
+                      },
+                      child: _imageFile != null
+                          ? CircleAvatar(
+                              minRadius: 70,
+                              maxRadius: 70,
+                              child: ClipOval(
+                                child: Image(
+                                  image: FileImage(_imageFile!),
+                                  fit: BoxFit.fill,
+                                ),
+                              ))
+                          : _imageUrl == null
+                              ? CircleAvatar(
+                                  minRadius: 70,
+                                  maxRadius: 70,
+                                  child: ClipOval(
+                                    child: Image(
+                                      image: colorPallete.logo,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ))
+                              : CircleAvatar(
+                                  minRadius: 70,
+                                  maxRadius: 70,
+                                  child: ClipOval(
+                                    child: Image(
+                                      image: NetworkImage(_imageUrl!),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  )),
+                    )),
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: Text(

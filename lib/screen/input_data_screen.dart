@@ -17,9 +17,9 @@ class InputDataScreen extends StatefulWidget {
 }
 
 class _InputDataScreenState extends State<InputDataScreen> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _bioController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _bioController = TextEditingController();
 
   late ColorPallete colorPallete;
   late Account account;
