@@ -45,43 +45,22 @@ class _SavedScreenState extends State<SavedScreen> {
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
             backgroundColor: colorPallete.backgroundColor,
+            appBar: AppBar(
+              title: Text(
+                'Saved Post',
+                style: TextStyle(color: colorPallete.fontColor),
+              ),
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios, color: colorPallete.fontColor),
+                onPressed: () {
+                  Navigator.popAndPushNamed(context, '/main');
+                },
+              ),
+              backgroundColor: colorPallete.backgroundColor,
+            ),
             body: ListView(
               physics: const NeverScrollableScrollPhysics(),
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.chevron_left,
-                        color: colorPallete.fontColor,
-                        size: 40,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 30.0, right: 30.0),
-                          child: Text('Saved Post',
-                              style: TextStyle(
-                                  fontSize: 32,
-                                  color: colorPallete.fontColor,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+              children: [],
             ),
           );
   }

@@ -311,7 +311,6 @@ class PostService {
         savedPosts.remove(post);
       }
     }
-
     return savedPosts;
   }
 }
