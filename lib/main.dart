@@ -18,6 +18,7 @@ import 'package:flux/screen/posting_screen.dart';
 import 'package:flux/screen/register_screen.dart';
 import 'package:flux/screen/saved_screen.dart';
 import 'package:flux/screen/settings_screen.dart';
+import 'package:flux/screen/verification_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -53,6 +54,7 @@ class MainApp extends StatelessWidget {
         '/main': (context) => const MainScreen(),
         '/launch': (context) => const LaunchAppScreen(),
         '/settings': (context) => const SettingsScreen(),
+        '/verification': (context) => const VerificationScreen(),
       },
     );
   }

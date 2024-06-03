@@ -87,14 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           }
                         }
                         if (postingBoxes.isEmpty) {
-                          postingBoxes.add(Center(
-                              child: Text(
-                            'Go Find Fren...',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: colorPallete.fontColor),
-                          )));
                           postingBoxes.add(const SizedBox(height: 10));
                           postingBoxes.add(Center(
                               child: Text(

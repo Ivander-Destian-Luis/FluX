@@ -76,6 +76,7 @@ class _FollowingsScreenState extends State<FollowingsScreen> {
                   style: TextStyle(
                     color: colorPallete.fontColor,
                     fontWeight: FontWeight.bold,
+                    fontSize: 28,
                   ),
                 ),
               ),
@@ -94,18 +95,6 @@ class _FollowingsScreenState extends State<FollowingsScreen> {
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 60.0, left: 30.0, right: 30.0),
-                        child: Text(
-                          'Followings',
-                          style: TextStyle(
-                            fontSize: 32,
-                            color: colorPallete.fontColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
                       Expanded(
                         child: ListView.builder(
                           itemCount: followingAccounts.length,
