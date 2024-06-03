@@ -75,8 +75,10 @@ class _PostBoxState extends State<NotificationCard> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    ProfileScreen(account: account!)));
+                                builder: (context) => ProfileScreen(
+                                      account: account!,
+                                      selectPosted: true,
+                                    )));
                       },
                       child: Row(
                         children: [

@@ -82,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               colorPallete: colorPallete,
                               uid: post.posterUid!,
                               post: post,
+                              profileEnabled: true,
                             ));
                             postingBoxes.add(const SizedBox(height: 10));
                           }

@@ -73,60 +73,50 @@ class _VerificationScreenState extends State<VerificationScreen> {
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
             backgroundColor: colorPallete.backgroundColor,
-            body: ListView(
-              physics: const NeverScrollableScrollPhysics(),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 30.0, right: 30.0, bottom: 10),
+                  child: Text('Email',
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: colorPallete.fontColor,
+                          fontWeight: FontWeight.bold)),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 250, left: 30.0, right: 30.0, bottom: 10),
-                      child: Text('Email',
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: colorPallete.fontColor,
-                              fontWeight: FontWeight.bold)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: TextFormField(
+                    controller: _emailController,
+                    style: TextStyle(color: colorPallete.fontColor),
+                    decoration: InputDecoration(
+                      errorText: _errorMessage,
+                      border:
+                          const UnderlineInputBorder(borderSide: BorderSide()),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: TextFormField(
-                        controller: _emailController,
-                        style: TextStyle(color: colorPallete.fontColor),
-                        decoration: InputDecoration(
-                          errorText: _errorMessage,
-                          border: const UnderlineInputBorder(
-                              borderSide: BorderSide()),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 30.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: _sendPasswordResetEmail,
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: colorPallete.backgroundColor,
+                          fixedSize: const Size(250, 50),
+                          side: BorderSide(
+                              color: colorPallete.fontColor, width: 2)),
+                      child: Text(
+                        'Send Verification Email',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: colorPallete.fontColor,
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 30.0),
-                      child: Center(
-                        child: ElevatedButton(
-                          onPressed: _sendPasswordResetEmail,
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: colorPallete.backgroundColor,
-                              fixedSize: const Size(250, 50),
-                              side: BorderSide(
-                                  color: colorPallete.fontColor, width: 2)),
-                          child: Text(
-                            'Send Verification Email',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: colorPallete.fontColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),

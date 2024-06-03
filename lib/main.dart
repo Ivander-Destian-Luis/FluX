@@ -40,6 +40,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: '/launch',
+      theme:
+          ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.black)),
       routes: {
         '/browse': (context) => const BrowseScreen(),
         '/forgotPassword': (context) => const ForgotPassword(),
@@ -51,11 +53,12 @@ class MainApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
         '/saved': (context) => const SavedScreen(),
         '/input_data': (context) => const InputDataScreen(),
-        '/main': (context) => const MainScreen(),
+        '/main': (context) => const MainScreen(index: 0),
         '/launch': (context) => const LaunchAppScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/verification': (context) => const VerificationScreen(),
       },
+      themeAnimationDuration: Duration.zero,
     );
   }
 }

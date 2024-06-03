@@ -59,7 +59,10 @@ class _FollowersScreenState extends State<FollowersScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProfileScreen(account: account),
+        builder: (context) => ProfileScreen(
+          account: account,
+          selectPosted: true,
+        ),
       ),
     );
   }
