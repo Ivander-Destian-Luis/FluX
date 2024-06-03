@@ -154,7 +154,7 @@ class _InputDataScreenState extends State<EditDataScreen> {
                                   fit: BoxFit.fill,
                                 ),
                               ))
-                          : _imageUrl == null
+                          : _imageUrl == ''
                               ? CircleAvatar(
                                   minRadius: 70,
                                   maxRadius: 70,
