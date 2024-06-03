@@ -126,17 +126,6 @@ class _PostBoxState extends State<PostCard> {
                                     style: TextStyle(
                                         color: widget.colorPallete.fontColor),
                                   ),
-                                  // if (widget.uid !=
-                                  //     FirebaseAuth.instance.currentUser!.uid)
-                                  //   TextButton(
-                                  //     onPressed: toggleFollow,
-                                  //     child: Text(
-                                  //         isFollowing ? 'Unfollow' : 'Follow'),
-                                  //     style: TextButton.styleFrom(
-                                  //       foregroundColor:
-                                  //           widget.colorPallete.textLinkColor,
-                                  //     ),
-                                  //   ),
                                   Text(
                                     ' ${DateTime.now().difference(widget.post.postedTime).inDays > 0 ? '${DateTime.now().difference(widget.post.postedTime).inDays}d ' : ''}${DateTime.now().difference(widget.post.postedTime).inHours > 0 ? '${DateTime.now().difference(widget.post.postedTime).inHours % 24}h ' : ''}${DateTime.now().difference(widget.post.postedTime).inMinutes > 0 ? "${DateTime.now().difference(widget.post.postedTime).inMinutes % 60}m" : "${DateTime.now().difference(widget.post.postedTime).inSeconds % 60}s"}',
                                     style: TextStyle(
@@ -415,7 +404,36 @@ class _PostBoxState extends State<PostCard> {
                 Padding(
                   padding: const EdgeInsets.only(top: 3),
                   child: PopupMenuButton(
-                    itemBuilder: (context) => [],
+                    offset: const Offset(-10, 50),
+                    color: widget.colorPallete.postBackgroundColor,
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Post has been reported.'),
+                                content: const Text('You reported this post!'),
+                                actions: [
+                                  TextButton(
+                                    child: Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          'Report',
+                          style:
+                              TextStyle(color: widget.colorPallete.fontColor),
+                        ),
+                      ),
+                    ],
                     iconColor: widget.colorPallete.fontColor,
                   ),
                 ),

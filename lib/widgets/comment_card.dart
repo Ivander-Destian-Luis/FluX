@@ -44,9 +44,16 @@ class _CommentCardState extends State<CommentCard> {
             child: Row(
               children: [
                 if (widget.comment.isNotEmpty) ...[
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(account!.profilePictureUrl),
-                  ),
+                  account!.profilePictureUrl.isNotEmpty
+                      ? CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(account!.profilePictureUrl),
+                        )
+                      : CircleAvatar(
+                          backgroundImage: widget.colorPallete.logo,
+                          backgroundColor:
+                              widget.colorPallete.postBackgroundColor,
+                        ),
                   const SizedBox(width: 10),
                   Text(
                     account!.username,
