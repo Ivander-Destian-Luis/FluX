@@ -371,6 +371,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       PopupMenuItem(
+<<<<<<< Updated upstream
+=======
+                        onTap: () {
+                          Navigator.pushNamed(context, '/saved')
+                              .then((_) => setState(() {
+                                    initialize();
+                                  }));
+                        },
+                        child: Text(
+                          'Saved Post',
+                          style: TextStyle(color: colorPallete.fontColor),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/changePassword')
+                              .then((_) => setState(() {
+                                    initialize();
+                                  }));
+                        },
+                        child: Text(
+                          'Change Password',
+                          style: TextStyle(color: colorPallete.fontColor),
+                        ),
+                      ),
+                      PopupMenuItem(
+>>>>>>> Stashed changes
                         onTap: () async {
                           await AuthenticationService.logout().whenComplete(() {
                             Navigator.pushNamedAndRemoveUntil(

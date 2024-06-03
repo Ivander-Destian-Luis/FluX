@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/screen/login_screen.dart';
+import 'package:flux/screen/profile_screen.dart';
 import 'package:flux/services/authentication_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flux/services/account_service.dart';
@@ -80,7 +81,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
         await user.updatePassword(newPassword);
         await FirebaseAuth.instance.signOut();
-        Navigator.pushReplacementNamed(context, '/login_screen');
+        Navigator.pushReplacementNamed(context, '/login');
       }
     } catch (e) {
       setState(() {

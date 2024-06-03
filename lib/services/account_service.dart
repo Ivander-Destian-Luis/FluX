@@ -198,4 +198,23 @@ class AccountService {
       edit(targetUid, null, null, null, null, targetFollowers, null, null);
     } catch (e) {}
   }
+<<<<<<< Updated upstream
+=======
+
+  static Future<void> savePost(String uid, Posting post) async {
+    Account? account = await getAccountByUid(uid);
+
+    account!.saved.add(post.postId!);
+
+    await edit(uid, null, null, null, null, null, null, null, account.saved);
+  }
+
+  static Future<void> removePost(String uid, Posting post) async {
+    Account? account = await getAccountByUid(uid);
+
+    account!.saved.remove(post.postId!);
+
+    await edit(uid, null, null, null, null, null, null, null, account.saved);
+  }
+>>>>>>> Stashed changes
 }

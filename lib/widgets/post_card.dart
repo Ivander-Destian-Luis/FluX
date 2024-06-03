@@ -336,6 +336,7 @@ class _PostBoxState extends State <PostCard> {
                             Text(commentsLength.toString(),
                                 style: TextStyle(
                                     color: widget.colorPallete.fontColor)),
+<<<<<<< Updated upstream
                           ],
                         ),
                         GestureDetector(
@@ -347,6 +348,40 @@ class _PostBoxState extends State <PostCard> {
                               color: widget.colorPallete.fontColor),
                         ),
                       ],
+=======
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              setState(() {
+                                isBookmarked = !isBookmarked;
+                              });
+
+                              try {
+                                if (isBookmarked) {
+                                  await AccountService.savePost(
+                                    FirebaseAuth.instance.currentUser!.uid,
+                                    widget.post,
+                                  );
+                                } else {
+                                  await AccountService.removePost(
+                                    FirebaseAuth.instance.currentUser!.uid,
+                                    widget.post,
+                                  );
+                                }
+                              } catch (e) {
+                                print("Error: $e");
+                              }
+                            },
+                            child: Icon(
+                              isBookmarked
+                                  ? Icons.bookmark
+                                  : Icons.bookmark_outline,
+                              color: widget.colorPallete.fontColor,
+                            ),
+                          ),
+                        ],
+                      ),
+>>>>>>> Stashed changes
                     ),
                   ],
                 ),

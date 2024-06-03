@@ -154,13 +154,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.pushReplacementNamed(
-                                context, '/forgotPassword');
+                                context, '/verification');
                           },
                           child: Text(
                             'Forgot Password',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: colorPallete.fontColor),
+                                color: colorPallete.textLinkColor),
                           ),
                         ),
                       ),
@@ -175,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             'Don\'t Have Account?',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: colorPallete.fontColor),
+                                color: colorPallete.textLinkColor),
                           ),
                         ),
                       ),

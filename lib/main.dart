@@ -15,6 +15,7 @@ import 'package:flux/screen/profile_screen.dart';
 import 'package:flux/screen/register_screen.dart';
 import 'package:flux/screen/saved_screen.dart';
 import 'package:flux/screen/settings_screen.dart';
+import 'package:flux/screen/verification_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -35,9 +36,10 @@ class MainApp extends StatelessWidget {
       initialRoute: '/launch',
       routes: {
         '/browse': (context) => const BrowseScreen(),
-        '/forgotPassword': (context) => const ForgotPassword(),
+        '/forgotPassword': (context) => const ForgotPasswordScreen(),
+        '/verification': (context) => VerificationScreen(),
         '/home': (context) => const HomeScreen(),
-        'changePassword': (context) => const ChangePasswordScreen(),
+        '/changePassword': (context) => const ChangePasswordScreen(),
         '/login': (context) => const LoginScreen(),
         '/notification': (context) => const NotificationScreen(),
         '/posting': (context) => const PostingScreen(),
