@@ -54,6 +54,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
             appBar: AppBar(
+              backgroundColor: colorPallete.backgroundColor,
               title: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
@@ -78,6 +79,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                   ),
                 ),
               ),
+              automaticallyImplyLeading: false,
             ),
             backgroundColor: colorPallete.backgroundColor,
             body: searchResult == ''

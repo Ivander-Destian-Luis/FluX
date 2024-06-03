@@ -108,9 +108,13 @@ class _PostBoxState extends State<PostCard> {
                                         account!.profilePictureUrl),
                                   ),
                                 )
-                              : const Padding(
+                              : Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: CircleAvatar(),
+                                  child: CircleAvatar(
+                                    backgroundImage: widget.colorPallete.logo,
+                                    backgroundColor:
+                                        widget.colorPallete.backgroundColor,
+                                  ),
                                 ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

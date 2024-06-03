@@ -85,6 +85,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             notificationBoxes.add(const SizedBox(height: 10));
                           }
                         }
+                        if (notificationBoxes.isEmpty) {
+                          notificationBoxes.add(Center(
+                            child: Text(
+                              'Nothing Here',
+                              style: TextStyle(color: colorPallete.fontColor),
+                            ),
+                          ));
+                        }
                         return ListView(
                           children: notificationBoxes,
                         );

@@ -1,21 +1,19 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
-import 'package:flux/screen/home_screen.dart';
 import 'package:flux/screen/profile_screen.dart';
 import 'package:flux/services/account_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class FollowingScreen extends StatefulWidget {
+class FollowingsScreen extends StatefulWidget {
   final Account account;
-  const FollowingScreen({super.key, required this.account});
+  const FollowingsScreen({super.key, required this.account});
 
   @override
-  State<FollowingScreen> createState() => _FollowingScreenState();
+  State<FollowingsScreen> createState() => _FollowingsScreenState();
 }
 
-class _FollowingScreenState extends State<FollowingScreen> {
+class _FollowingsScreenState extends State<FollowingsScreen> {
   late ColorPallete colorPallete;
   late Account account;
   late SharedPreferences prefs;
@@ -69,44 +67,68 @@ class _FollowingScreenState extends State<FollowingScreen> {
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
             backgroundColor: colorPallete.backgroundColor,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.only(top: 60.0, left: 30.0, right: 30.0),
-                  child: Text(
-                    'Followings',
-                    style: TextStyle(
-                      fontSize: 32,
-                      color: colorPallete.fontColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+            appBar: AppBar(
+              backgroundColor: colorPallete.backgroundColor,
+              title: Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Text(
+                  'Followings',
+                  style: TextStyle(
+                    color: colorPallete.fontColor,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: followingAccounts.length,
-                    itemBuilder: (context, index) {
-                      final account = followingAccounts[index];
-                      return ListTile(
-                        leading: GestureDetector(
-                          onTap: () => navigateToProfile(account),
-                          child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(account.profilePictureUrl),
+              ),
+              automaticallyImplyLeading: false,
+            ),
+            body: followingAccounts.isEmpty
+                ? Center(
+                    child: Text(
+                      'Follow other users!',
+                      style: TextStyle(
+                          color: colorPallete.fontColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 60.0, left: 30.0, right: 30.0),
+                        child: Text(
+                          'Followings',
+                          style: TextStyle(
+                            fontSize: 32,
+                            color: colorPallete.fontColor,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        title: GestureDetector(
-                          onTap: () => navigateToProfile(account),
-                          child: Text(account.username),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: followingAccounts.length,
+                          itemBuilder: (context, index) {
+                            final account = followingAccounts[index];
+                            return ListTile(
+                              leading: GestureDetector(
+                                onTap: () => navigateToProfile(account),
+                                child: CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(account.profilePictureUrl),
+                                ),
+                              ),
+                              title: GestureDetector(
+                                onTap: () => navigateToProfile(account),
+                                child: Text(account.username),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
           );
   }
 }

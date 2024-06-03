@@ -27,8 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ? DarkModeColorPallete()
           : LightModeColorPallete();
 
-      print("init");
-
       account = (await AccountService.getAccountByUid(
           FirebaseAuth.instance.currentUser!.uid))!;
 
@@ -73,8 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: StreamBuilder(
                       stream: PostService.getPostingList(),
                       builder: (context, snapshot) {
-                        List<Posting> posts = (snapshot.data ??
-                            List<Posting>.empty()) as List<Posting>;
+                        List<Posting> posts =
+                            (snapshot.data ?? List<Posting>.empty());
                         List<Widget> postingBoxes = [];
                         for (Posting post in posts) {
                           if (account.followings.contains(post.posterUid) ||

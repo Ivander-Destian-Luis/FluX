@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/models/posting.dart';
+import 'package:flux/screen/edit_data_screen.dart';
 import 'package:flux/screen/followers_screen.dart';
 import 'package:flux/screen/followings_screen.dart';
 import 'package:flux/services/account_service.dart';
@@ -86,6 +87,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   )
                                 : CircleAvatar(
                                     backgroundImage: colorPallete.logo,
+                                    backgroundColor:
+                                        colorPallete.postBackgroundColor,
                                     radius: 60,
                                   ),
                           ),
@@ -140,7 +143,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => FollowingScreen(
+                                          builder: (context) =>
+                                              FollowingsScreen(
                                             account: ownerAccount,
                                           ),
                                         ),
