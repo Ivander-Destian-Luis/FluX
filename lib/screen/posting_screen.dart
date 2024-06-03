@@ -44,12 +44,17 @@ class _PostingScreenState extends State<PostingScreen> {
   }
 
   void _pickLocation() async {
+    if (!(await Geolocator.isLocationServiceEnabled())) {
+      LocationService.showGpsDialog(context);
+    }
     position = await LocationService.getCurrentPosition();
-    List<Placemark> placemarks = await GeocodingPlatform.instance!
-        .placemarkFromCoordinates(position!.latitude, position!.longitude);
-    setState(() {
-      _location = "${placemarks[0].subAdministrativeArea}";
-    });
+    try {
+      List<Placemark> placemarks = await GeocodingPlatform.instance!
+          .placemarkFromCoordinates(position!.latitude, position!.longitude);
+      setState(() {
+        _location = "${placemarks[0].subAdministrativeArea}";
+      });
+    } catch (e) {}
   }
 
   void initialize() async {

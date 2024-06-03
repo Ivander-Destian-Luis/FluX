@@ -25,6 +25,8 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+apply from: project(':flutter_config').projectDir.getPath() + "/dotenv.gradle"
+
 android {
     namespace "com.example.flux"
     compileSdkVersion flutter.compileSdkVersion
@@ -48,7 +50,7 @@ android {
         applicationId "com.example.flux"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 20
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

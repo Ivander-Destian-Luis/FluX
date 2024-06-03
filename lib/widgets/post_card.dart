@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/models/posting.dart';
+import 'package:flux/screen/google_maps_screen.dart';
 import 'package:flux/screen/profile_screen.dart';
 import 'package:flux/services/account_service.dart';
 import 'package:flux/services/post_service.dart';
@@ -141,12 +142,28 @@ class _PostBoxState extends State<PostCard> {
                                   ),
                                 ],
                               ),
-                              Text(
-                                widget.post.location ?? '',
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    color: widget.colorPallete.textLinkColor),
-                              ),
+                              if (widget.post.location != null) ...[
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                GoogleMapsScreen(
+                                                    latitude:
+                                                        widget.post.latitude!,
+                                                    longitude:
+                                                        widget.post.longitude!),
+                                          ));
+                                    },
+                                    child: Text(
+                                      widget.post.location ?? '',
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          color: widget
+                                              .colorPallete.textLinkColor),
+                                    )),
+                              ],
                             ],
                           ),
                         ],
