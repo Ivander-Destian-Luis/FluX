@@ -62,6 +62,11 @@ class PostService {
             accountData['post_id'] = key.toString();
             items.add(Posting.fromJson(accountData));
           });
+          items.sort(
+            (a, b) {
+              return b.postedTime.compareTo(a.postedTime);
+            },
+          );
         }
       } catch (e) {
         print(e);
