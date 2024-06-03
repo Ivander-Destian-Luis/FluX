@@ -61,8 +61,10 @@ class _PostBoxState extends State<UserCard> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    ProfileScreen(account: account!)));
+                                builder: (context) => ProfileScreen(
+                                      account: account!,
+                                      selectPosted: true,
+                                    )));
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

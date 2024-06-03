@@ -12,7 +12,8 @@ import 'package:flux/services/account_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final int index;
+  const MainScreen({super.key, required this.index});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -42,9 +43,15 @@ class _MainScreenState extends State<MainScreen> {
         const NotificationScreen(),
         ProfileScreen(
           account: account,
+          selectPosted: true,
+        ),
+        ProfileScreen(
+          account: account,
+          selectPosted: false,
         ),
       ];
       setState(() {
+        _currentIndex = widget.index;
         _isLoading = false;
       });
       return value;
@@ -54,7 +61,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-
     initialize();
   }
 
@@ -68,16 +74,26 @@ class _MainScreenState extends State<MainScreen> {
             bottomNavigationBar: CurvedNavigationBar(
               height: 60,
               backgroundColor: colorPallete.backgroundColor,
+              index: _currentIndex > 4 ? 4 : _currentIndex,
               color: colorPallete.postBackgroundColor,
               buttonBackgroundColor: _currentIndex == 2
                   ? colorPallete.heroColor
                   : colorPallete.postBackgroundColor,
               animationDuration: const Duration(milliseconds: 250),
               onTap: (index) {
-                initialize();
-                setState(() {
-                  _currentIndex = index;
-                });
+                if (index == 0) {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/main', (route) => route.isFirst);
+                }
+                if (index < 4) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                } else {
+                  setState(() {
+                    _currentIndex = 4;
+                  });
+                }
               },
               items: [
                 Icon(Icons.home, color: colorPallete.borderColor),

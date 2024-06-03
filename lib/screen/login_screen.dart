@@ -152,8 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 32),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacementNamed(
-                                context, '/forgotPassword');
+                            Navigator.pushNamed(context, '/verification');
                           },
                           child: Text(
                             'Forgot Password',

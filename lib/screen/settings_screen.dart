@@ -65,9 +65,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         padding: EdgeInsets.only(left: 10),
                         child: Text('Dark Mode',
                             style: TextStyle(
-                                color: colorPallete.fontColor,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold)),
+                              color: colorPallete.fontColor,
+                              fontSize: 20,
+                            )),
                       ),
                       Switch(
                         value: _isDarkMode!,
@@ -83,6 +83,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text('Change Password',
+                            style: TextStyle(
+                              color: colorPallete.fontColor,
+                              fontSize: 20,
+                            )),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/verification');
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          decoration: BoxDecoration(
+                              color: colorPallete.buttonColor,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Text('here',
+                              style:
+                                  TextStyle(color: colorPallete.textLinkColor)),
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),

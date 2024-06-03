@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/screen/main_screen.dart';
@@ -107,7 +106,7 @@ class _InputDataScreenState extends State<EditDataScreen> {
             null);
       }
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => const MainScreen(),
+        builder: (context) => const MainScreen(index: 0),
       ));
     }
   }
