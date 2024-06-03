@@ -59,55 +59,71 @@ class _FollowersScreenState extends State<FollowersScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProfileScreen(account: account),
+        builder: (context) => ProfileScreen(
+          account: account,
+          selectPosted: true,
+        ),
       ),
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return _isLoading
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
             backgroundColor: colorPallete.backgroundColor,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.only(top: 60.0, left: 30.0, right: 30.0),
-                  child: Text(
-                    'Followers',
-                    style: TextStyle(
-                      fontSize: 32,
-                      color: colorPallete.fontColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+            appBar: AppBar(
+              backgroundColor: colorPallete.backgroundColor,
+              title: Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Text(
+                  'Followers',
+                  style: TextStyle(
+                    color: colorPallete.fontColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
                   ),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: followersAccounts.length,
-                    itemBuilder: (context, index) {
-                      final account = followersAccounts[index];
-                      return ListTile(
-                        leading: GestureDetector(
-                          onTap: () => navigateToProfile(account),
-                          child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(account.profilePictureUrl),
-                          ),
-                        ),
-                        title: GestureDetector(
-                          onTap: () => navigateToProfile(account),
-                          child: Text(account.username),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+              ),
+              automaticallyImplyLeading: false,
             ),
+            body: followersAccounts.isEmpty
+                ? Center(
+                    child: Text(
+                      'Oops! You don\'t have any followers',
+                      style: TextStyle(
+                          color: colorPallete.fontColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: followersAccounts.length,
+                          itemBuilder: (context, index) {
+                            final account = followersAccounts[index];
+                            return ListTile(
+                              leading: GestureDetector(
+                                onTap: () => navigateToProfile(account),
+                                child: CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(account.profilePictureUrl),
+                                ),
+                              ),
+                              title: GestureDetector(
+                                onTap: () => navigateToProfile(account),
+                                child: Text(account.username),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
           );
   }
 }

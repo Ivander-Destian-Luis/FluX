@@ -5,6 +5,7 @@ import 'package:flux/models/account.dart';
 import 'package:flux/models/alert.dart';
 import 'package:flux/models/posting.dart';
 import 'package:flux/screen/google_maps_screen.dart';
+import 'package:flux/screen/main_screen.dart';
 import 'package:flux/screen/profile_screen.dart';
 import 'package:flux/services/account_service.dart';
 import 'package:flux/services/notification_service.dart';
@@ -16,12 +17,14 @@ class PostCard extends StatefulWidget {
   final String uid;
   final Posting post;
   final String? postingImageUrl;
+  final bool profileEnabled;
 
   const PostCard(
       {super.key,
       required this.colorPallete,
       required this.uid,
       required this.post,
+      required this.profileEnabled,
       this.postingImageUrl});
 
   @override
@@ -52,16 +55,17 @@ class _PostBoxState extends State<PostCard> {
         _isLiked = false;
       });
     }
+
     commentsLength = await PostService.getCommentsLength(widget.post);
     setState(() {
       commentsLength = commentsLength;
     });
-    account ??=
-        await AccountService.getAccountByUid(widget.uid).whenComplete(() {
-      setState(() {
-        _isLoading = false;
-      });
+    account ??= await AccountService.getAccountByUid(widget.uid);
+    setState(() {
+      _isLoading = false;
     });
+
+    print(account!.username);
   }
 
   void _notify(String notificationContext) async {
@@ -107,11 +111,13 @@ class _PostBoxState extends State<PostCard> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ProfileScreen(account: account!)));
+                        if (widget.profileEnabled) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MainScreen(index: 4)));
+                        }
                       },
                       child: Row(
                         children: [
@@ -474,11 +480,26 @@ class _PostBoxState extends State<PostCard> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: const Text('Post has been reported.'),
-                                content: const Text('You reported this post!'),
+                                backgroundColor:
+                                    widget.colorPallete.backgroundColor,
+                                title: Text(
+                                  'Post has been reported.',
+                                  style: TextStyle(
+                                      color: widget.colorPallete.fontColor),
+                                ),
+                                content: Text(
+                                  'You reported this post!',
+                                  style: TextStyle(
+                                      color: widget.colorPallete.fontColor),
+                                ),
                                 actions: [
                                   TextButton(
-                                    child: Text('OK'),
+                                    child: Text(
+                                      'OK',
+                                      style: TextStyle(
+                                          color: widget.colorPallete.fontColor,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },

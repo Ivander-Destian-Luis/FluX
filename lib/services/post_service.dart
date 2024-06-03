@@ -75,6 +75,70 @@ class PostService {
     });
   }
 
+  static Stream<List<Posting>> getPostingList2() {
+    return _database.onValue.map((event) {
+      List<Posting> items = [];
+      DataSnapshot snapshot = event.snapshot;
+      try {
+        if (snapshot.value != null) {
+          Map<Object?, Object?> listData =
+              snapshot.value as Map<Object?, Object?>;
+          listData.forEach((key, value) {
+            final data = value as Map<Object?, Object?>;
+            Map<String, dynamic> accountData = {};
+            bool likesExisted = false;
+            bool commentsExisted = false;
+            data.forEach((key, value) {
+              if (key.toString() == 'likes') {
+                likesExisted = true;
+                final dataLikes = value as List<Object?>;
+                List<String> likes = [];
+                for (var like in dataLikes) {
+                  likes.add(like.toString());
+                }
+                accountData[key.toString()] = likes;
+              } else if (key.toString() == 'comments') {
+                commentsExisted = true;
+                final dataComments = value as Map<Object?, Object?>;
+                Map<String, List<String>> comments = {};
+                dataComments.forEach((key, value) {
+                  final temp = value as List<Object?>;
+                  List<String> listComments = [];
+                  for (var comment in temp) {
+                    listComments.add(comment.toString());
+                  }
+                  comments[key.toString()] = listComments;
+                });
+                accountData[key.toString()] = comments;
+              } else {
+                accountData[key.toString()] = value;
+              }
+            });
+
+            if (!likesExisted) {
+              accountData['likes'] = List<String>.empty();
+            }
+
+            if (!commentsExisted) {
+              accountData['comments'] = Map<String, List<dynamic>>.from({});
+            }
+
+            accountData['post_id'] = key.toString();
+            items.add(Posting.fromJson(accountData));
+          });
+          items.sort(
+            (a, b) {
+              return b.postedTime.compareTo(a.postedTime);
+            },
+          );
+        }
+      } catch (e) {
+        print(e);
+      }
+      return items;
+    });
+  }
+
   static Future<int> post(Posting posting, String uid) async {
     int statusCode = 0;
     try {

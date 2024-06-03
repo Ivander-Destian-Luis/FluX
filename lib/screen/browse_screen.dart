@@ -100,6 +100,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                                   colorPallete: colorPallete,
                                   uid: post.posterUid!,
                                   post: post,
+                                  profileEnabled: true,
                                 ));
                                 postingBoxes.add(const SizedBox(height: 10));
                               }

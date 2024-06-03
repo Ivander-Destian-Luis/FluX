@@ -40,9 +40,15 @@ class _LaunchAppScreenState extends State<LaunchAppScreen> {
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 2)).then(
-      (value) {
+      (value) async {
         if (FirebaseAuth.instance.currentUser != null) {
-          Navigator.popAndPushNamed(context, '/main');
+          if (await AccountService.getAccountByUid(
+                  FirebaseAuth.instance.currentUser!.uid) !=
+              null) {
+            Navigator.popAndPushNamed(context, '/main');
+          } else {
+            Navigator.popAndPushNamed(context, '/input_data');
+          }
         } else {
           Navigator.popAndPushNamed(context, '/login');
         }

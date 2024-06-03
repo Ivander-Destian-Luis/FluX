@@ -7,6 +7,7 @@ import 'package:flux/models/posting.dart';
 import 'package:flux/screen/edit_data_screen.dart';
 import 'package:flux/screen/followers_screen.dart';
 import 'package:flux/screen/followings_screen.dart';
+import 'package:flux/screen/main_screen.dart';
 import 'package:flux/services/account_service.dart';
 import 'package:flux/services/authentication_service.dart';
 import 'package:flux/services/notification_service.dart';
@@ -17,8 +18,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Account account;
+  final bool selectPosted;
 
-  const ProfileScreen({super.key, required this.account});
+  const ProfileScreen(
+      {super.key, required this.account, required this.selectPosted});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -34,7 +37,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late String _targetUid;
 
   bool _isLoading = true;
-  String selectedOption = "posted";
 
   @override
   void initState() {
@@ -323,9 +325,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              setState(() {
-                                selectedOption = "posted";
-                              });
+                              if (!widget.selectPosted) {
+                                Navigator.pushReplacement(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder: (context, animation,
+                                              secondaryAnimation) =>
+                                          MainScreen(index: 4),
+                                      transitionDuration: Duration.zero,
+                                    ));
+                              }
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(top: 15),
@@ -333,7 +342,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 'Posted',
                                 style: TextStyle(
                                   color: colorPallete.fontColor,
-                                  fontWeight: selectedOption == "posted"
+                                  fontWeight: widget.selectPosted
                                       ? FontWeight.bold
                                       : FontWeight.normal,
                                   fontSize: 18,
@@ -343,9 +352,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              setState(() {
-                                selectedOption = "liked";
-                              });
+                              if (widget.selectPosted) {
+                                Navigator.pushReplacement(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder: (context, animation,
+                                              secondaryAnimation) =>
+                                          MainScreen(index: 5),
+                                      transitionDuration: Duration.zero,
+                                    ));
+                              }
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(top: 15),
@@ -353,7 +369,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 'Liked',
                                 style: TextStyle(
                                   color: colorPallete.fontColor,
-                                  fontWeight: selectedOption == "liked"
+                                  fontWeight: !widget.selectPosted
                                       ? FontWeight.bold
                                       : FontWeight.normal,
                                   fontSize: 18,
@@ -369,7 +385,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: colorPallete.borderColor,
                         ),
                       ),
-                      if (selectedOption == 'posted') ...[
+                      if (widget.selectPosted) ...[
                         Expanded(
                           child: StreamBuilder(
                             stream: PostService.getPostingList(),
@@ -384,6 +400,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     colorPallete: colorPallete,
                                     uid: post.posterUid!,
                                     post: post,
+                                    profileEnabled: false,
                                   ));
                                   postingBoxes.add(const SizedBox(height: 10));
                                 }
@@ -394,7 +411,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             },
                           ),
                         )
-                      ] else if (selectedOption == 'liked') ...[
+                      ] else if (!widget.selectPosted) ...[
                         Expanded(
                           child: StreamBuilder(
                             stream: PostService.getPostingList(),
@@ -405,10 +422,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               List<Widget> postingBoxes = [];
                               for (Posting post in posts) {
                                 if (post.likes.contains(_targetUid)) {
-                                  postingBoxes.add(PostCard(
+                                  if (_targetUid == post.posterUid) {
+                                    postingBoxes.add(PostCard(
                                       colorPallete: colorPallete,
                                       uid: post.posterUid!,
-                                      post: post));
+                                      post: post,
+                                      profileEnabled: false,
+                                    ));
+                                  } else {
+                                    postingBoxes.add(PostCard(
+                                      colorPallete: colorPallete,
+                                      uid: post.posterUid!,
+                                      post: post,
+                                      profileEnabled: true,
+                                    ));
+                                  }
                                   postingBoxes.add(const SizedBox(height: 10));
                                 }
                               }
