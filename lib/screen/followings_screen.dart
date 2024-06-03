@@ -7,21 +7,20 @@ import 'package:flux/screen/profile_screen.dart';
 import 'package:flux/services/account_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class FollowersScreen extends StatefulWidget {
+class FollowingScreen extends StatefulWidget {
   final Account account;
-
-  const FollowersScreen({super.key, required this.account});
+  const FollowingScreen({super.key, required this.account});
 
   @override
-  State<FollowersScreen> createState() => _FollowersScreenState();
+  State<FollowingScreen> createState() => _FollowingScreenState();
 }
 
-class _FollowersScreenState extends State<FollowersScreen> {
+class _FollowingScreenState extends State<FollowingScreen> {
   late ColorPallete colorPallete;
   late Account account;
   late SharedPreferences prefs;
   bool _isLoading = true;
-  List<Account> followersAccounts = [];
+  List<Account> followingAccounts = [];
 
   @override
   void initState() {
@@ -36,22 +35,22 @@ class _FollowersScreenState extends State<FollowersScreen> {
         ? DarkModeColorPallete()
         : LightModeColorPallete();
 
-    await fetchfollowersAccounts();
+    await fetchFollowingAccounts();
     setState(() {
       _isLoading = false;
     });
   }
 
-  Future<void> fetchfollowersAccounts() async {
+  Future<void> fetchFollowingAccounts() async {
     List<Account> accounts = [];
-    for (String uid in account.followers) {
-      Account? followersAccount = await AccountService.getAccountByUid(uid);
-      if (followersAccount != null) {
-        accounts.add(followersAccount);
+    for (String uid in account.followings) {
+      Account? followingAccount = await AccountService.getAccountByUid(uid);
+      if (followingAccount != null) {
+        accounts.add(followingAccount);
       }
     }
     setState(() {
-      followersAccounts = accounts;
+      followingAccounts = accounts;
     });
   }
 
@@ -63,7 +62,7 @@ class _FollowersScreenState extends State<FollowersScreen> {
       ),
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return _isLoading
@@ -77,7 +76,7 @@ class _FollowersScreenState extends State<FollowersScreen> {
                   padding:
                       const EdgeInsets.only(top: 60.0, left: 30.0, right: 30.0),
                   child: Text(
-                    'Followers',
+                    'Followings',
                     style: TextStyle(
                       fontSize: 32,
                       color: colorPallete.fontColor,
@@ -87,9 +86,9 @@ class _FollowersScreenState extends State<FollowersScreen> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: followersAccounts.length,
+                    itemCount: followingAccounts.length,
                     itemBuilder: (context, index) {
-                      final account = followersAccounts[index];
+                      final account = followingAccounts[index];
                       return ListTile(
                         leading: GestureDetector(
                           onTap: () => navigateToProfile(account),

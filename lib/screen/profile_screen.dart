@@ -4,9 +4,7 @@ import 'package:flux/color_pallete.dart';
 import 'package:flux/models/account.dart';
 import 'package:flux/models/posting.dart';
 import 'package:flux/screen/followers_screen.dart';
-import 'package:flux/screen/following_screen.dart';
-import 'package:flux/screen/edit_data_screen.dart';
-
+import 'package:flux/screen/followings_screen.dart';
 import 'package:flux/services/account_service.dart';
 import 'package:flux/services/authentication_service.dart';
 import 'package:flux/services/post_service.dart';
